@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ecopower Landing Page
 
-## Getting Started
+Landing page moderne et professionnelle pour l'application Ecopower, développée avec Next.js 14, TypeScript et Tailwind CSS.
 
-First, run the development server:
+## 🚀 Technologies
+
+- **Next.js 14** - Framework React avec App Router
+- **TypeScript** - Typage statique
+- **Tailwind CSS** - Framework CSS utilitaire
+- **Lucide React** - Icônes modernes
+
+## 📦 Installation
+
+```bash
+npm install
+```
+
+## 🏃 Développement
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Structure du projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+ecopower-landing/
+├── app/
+│   ├── layout.tsx      # Layout principal
+│   ├── page.tsx        # Page d'accueil
+│   └── globals.css     # Styles globaux
+├── components/
+│   ├── Header.tsx           # En-tête avec navigation
+│   ├── HeroSection.tsx      # Section hero principale
+│   ├── FeaturesSection.tsx  # Fonctionnalités
+│   ├── AboutSection.tsx     # Mission et vision
+│   ├── ScreenshotsSection.tsx # Screenshots de l'app
+│   ├── PartnersSection.tsx  # Partenaires
+│   ├── DownloadSection.tsx  # Téléchargement
+│   └── Footer.tsx           # Pied de page
+└── public/
+    └── assets/
+        ├── screens/         # Screenshots de l'application
+        └── partenaires/     # Logos des partenaires
+```
 
-## Learn More
+## ✨ Fonctionnalités
 
-To learn more about Next.js, take a look at the following resources:
+- ✅ Design moderne et professionnel
+- ✅ Responsive (mobile-first)
+- ✅ Section screenshots interactive avec modal
+- ✅ Navigation fluide
+- ✅ Optimisation SEO
+- ✅ Performance optimisée avec Next.js Image
+- ✅ Accessibilité de base
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📱 Sections
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **HeroSection** - Proposition de valeur claire avec CTA
+2. **FeaturesSection** - 8 fonctionnalités clés
+3. **AboutSection** - Mission, vision et contexte africain
+4. **ScreenshotsSection** - Galerie interactive des captures d'écran
+5. **PartnersSection** - Partenaires
+6. **DownloadSection** - Liens de téléchargement (Google Play + App Store)
+7. **Footer** - Informations légales et contact
 
-## Deploy on Vercel
+## 🎨 Design
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Design sobre et moderne
+- Couleur principale : #FFA800 (orange)
+- Typographie : Inter
+- Animations fluides
+- Ombres et effets subtils
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📧 Contact
+
+Email : ecopowerafrique@gmail.com
+
+## 📄 Licence
+
+Tous droits réservés © 2024 Ecopower
