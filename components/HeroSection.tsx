@@ -22,7 +22,7 @@ export default function HeroSection() {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFA800]/10 rounded-full border border-[#FFA800]/20">
                 <Sparkles size={12} className="text-[#FFA800]" />
-                <span className="text-sm font-semibold text-[#FFA800]">Solution innovante pour le Togo</span>
+                <span className="text-sm font-semibold text-[#FFA800]">Solution innovante pour l'Afrique de l'Ouest</span>
               </div>
 
               <h1 className="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
@@ -34,7 +34,7 @@ export default function HeroSection() {
               </h1>
               
               <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl font-light">
-                Ecopower simplifie la gestion de votre consommation électrique au Togo. 
+                Ecopower simplifie la gestion de votre consommation électrique. 
                 Suivez vos relevés, générez vos factures automatiquement et gardez le contrôle 
                 sur vos dépenses énergétiques.
               </p>
@@ -62,11 +62,11 @@ export default function HeroSection() {
                 href="https://play.google.com/store/apps/details?id=tg.konou.ecopower"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FFA800] to-[#E69500] text-white rounded-2xl font-semibold hover:shadow-2xl hover:shadow-[#FFA800]/50 transition-all"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-5 py-2.5 sm:px-8 sm:py-4 bg-gradient-to-r from-[#FFA800] to-[#E69500] text-white rounded-2xl text-sm sm:text-base font-semibold hover:shadow-2xl hover:shadow-[#FFA800]/50 transition-all"
               >
-                <Smartphone size={20} />
+                <Smartphone size={16} className="sm:w-5 sm:h-5" />
                 <span>Télécharger sur Google Play</span>
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px] group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
           </div>
