@@ -125,7 +125,7 @@ export default function BillingPage() {
           return c._id === bill.consommationId._id ||
             (c.mois === bill.consommationId.mois && 
              c.annee === bill.consommationId.annee &&
-             c.residentId?._id === bill.residentId._id);
+             (bill.residentId ? c.residentId?._id === bill.residentId._id : true));
         }
         return false;
       });
@@ -139,11 +139,11 @@ export default function BillingPage() {
 
       // Préparer les données pour le PDF
       const residentData = {
-        _id: bill.residentId._id || residentFullData._id,
-        nom: bill.residentId.nom || residentFullData.nom || '',
-        prenom: bill.residentId.prenom || residentFullData.prenom || '',
-        email: bill.residentId.email || residentFullData.email || '',
-        telephone: residentFullData.telephone || bill.residentId.telephone || 'N/A',
+        _id: bill.residentId?._id || residentFullData._id,
+        nom: bill.residentId?.nom || residentFullData.nom || '',
+        prenom: bill.residentId?.prenom || residentFullData.prenom || '',
+        email: bill.residentId?.email || residentFullData.email || '',
+        telephone: residentFullData.telephone || bill.residentId?.telephone || 'N/A',
       };
 
       const consumptionData = {
