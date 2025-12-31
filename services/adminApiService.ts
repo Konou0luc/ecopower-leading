@@ -196,6 +196,47 @@ class AdminApiService {
     return this.request(`/admin/notifications?${query.toString()}`);
   }
 
+  async sendNotification(notificationData: { titre: string; message: string; destinataireId?: string; type?: string }) {
+    return this.request('/admin/notifications', {
+      method: 'POST',
+      body: JSON.stringify(notificationData),
+    });
+  }
+
+  async broadcastNotification(data: {
+    message: string;
+    title?: string;
+    role?: 'proprietaire' | 'resident' | 'admin';
+  }) {
+    return this.request<{
+      message: string;
+      summary: {
+        total: number;
+        success: number;
+        failed: number;
+        successRate: string;
+      };
+      notification: {
+        title: string;
+        message: string;
+        sentAt: string;
+        filter: string;
+      };
+      details: Array<{
+        userId: string;
+        email: string;
+        role: string;
+        status: 'success' | 'failed';
+        messageId?: string;
+        error?: string;
+        errorCode?: string;
+      }>;
+    }>('/admin/broadcast/notification', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Logs
   async getLogs(params?: { page?: number; limit?: number }) {
     const query = new URLSearchParams();
@@ -215,6 +256,11 @@ class AdminApiService {
       method: 'PUT',
       body: JSON.stringify(settings),
     });
+  }
+
+  // System Info
+  async getSystemInfo() {
+    return this.request('/admin/system/info');
   }
 }
 

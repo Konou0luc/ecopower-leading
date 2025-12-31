@@ -69,31 +69,35 @@ export default function ResidentsPage() {
               <p className="text-gray-600">Aucun résident trouvé</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Nom</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Email</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Téléphone</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Maison</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {residents.map((resident) => (
-                    <tr key={resident._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 font-semibold text-gray-900">
-                        {resident.prenom} {resident.nom}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600">{resident.email}</td>
-                      <td className="py-3 px-4 text-gray-600">{resident.telephone}</td>
-                      <td className="py-3 px-4 text-gray-600">
-                        {resident.maison?.nomMaison || 'N/A'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-4 md:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Nom</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Email</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Téléphone</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Maison</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {residents.map((resident) => (
+                        <tr key={resident._id} className="hover:bg-gray-50">
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
+                            {resident.prenom} {resident.nom}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">{resident.email}</td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">{resident.telephone}</td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {resident.maison?.nomMaison || 'N/A'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
         </AdminCardContent>

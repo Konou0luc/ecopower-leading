@@ -83,14 +83,14 @@ export default function HousesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 w-full max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Maisons</h1>
-          <p className="text-gray-600 mt-1">Gérez toutes les maisons enregistrées</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Maisons</h1>
+          <p className="text-sm md:text-base text-gray-600 mt-1">Gérez toutes les maisons enregistrées</p>
         </div>
-        <AdminButton>
+        <AdminButton className="w-full sm:w-auto">
           <Plus size={18} className="mr-2" />
           Ajouter une maison
         </AdminButton>
@@ -113,7 +113,7 @@ export default function HousesPage() {
       </AdminCard>
 
       {/* Houses Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {houses.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <Home size={48} className="mx-auto text-gray-400 mb-4" />

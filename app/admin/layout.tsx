@@ -31,12 +31,14 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 overflow-x-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col lg:ml-64">
+      <div className="flex-1 flex flex-col lg:ml-64 min-w-0 w-full">
         <Header />
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 w-full max-w-full overflow-x-hidden">
+          <div className="w-full max-w-full min-w-0">
+            {children}
+          </div>
         </main>
       </div>
     </div>

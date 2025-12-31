@@ -14,6 +14,12 @@ interface Consumption {
   kwh?: number;
   releveCompteur?: number;
   montant?: number;
+  residentId?: {
+    _id?: string;
+    nom?: string;
+    prenom?: string;
+    email?: string;
+  };
   maisonId?: {
     nomMaison?: string;
     adresse?: string;
@@ -91,37 +97,47 @@ export default function ConsumptionsPage() {
               <p className="text-gray-600">Aucune consommation trouvée</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Date</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Maison</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Relevé (kWh)</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Montant</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {consumptions.map((consumption) => (
-                    <tr key={consumption._id || consumption.id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 text-gray-900">
-                        {consumption.dateReleve 
-                          ? new Date(consumption.dateReleve).toLocaleDateString('fr-FR')
-                          : consumption.periode || 'N/A'}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600">
-                        {consumption.maisonId?.nomMaison || consumption.maison?.nomMaison || consumption.maisonId?.adresse || 'N/A'}
-                      </td>
-                      <td className="py-3 px-4 font-semibold text-gray-900">
-                        {consumption.kwh || consumption.releveCompteur || 0} kWh
-                      </td>
-                      <td className="py-3 px-4 font-semibold text-[#FFA800]">
-                        {(consumption.montant || 0).toLocaleString('fr-FR')} FCFA
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-4 md:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Date</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Résident</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Maison</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Relevé (kWh)</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Montant</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {consumptions.map((consumption) => (
+                        <tr key={consumption._id || consumption.id} className="hover:bg-gray-50">
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            {consumption.dateReleve 
+                              ? new Date(consumption.dateReleve).toLocaleDateString('fr-FR')
+                              : consumption.periode || 'N/A'}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {consumption.residentId 
+                              ? `${consumption.residentId.prenom || ''} ${consumption.residentId.nom || ''}`.trim() || 'N/A'
+                              : 'N/A'}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {consumption.maisonId?.nomMaison || consumption.maison?.nomMaison || consumption.maisonId?.adresse || 'N/A'}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
+                            {consumption.kwh || consumption.releveCompteur || 0} kWh
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-[#FFA800]">
+                            {(consumption.montant || 0).toLocaleString('fr-FR')} FCFA
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
         </AdminCardContent>

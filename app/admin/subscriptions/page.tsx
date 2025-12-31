@@ -53,45 +53,49 @@ export default function SubscriptionsPage() {
               <p className="text-gray-600">Aucun abonnement trouvé</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Utilisateur</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Type</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Date début</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Date fin</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Statut</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {subscriptions.map((sub) => (
-                    <tr key={sub._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 font-semibold text-gray-900">
-                        {sub.utilisateur?.prenom} {sub.utilisateur?.nom}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600">{sub.typeAbonnement}</td>
-                      <td className="py-3 px-4 text-gray-600">
-                        {new Date(sub.dateDebut).toLocaleDateString('fr-FR')}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600">
-                        {new Date(sub.dateFin).toLocaleDateString('fr-FR')}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            sub.statut === 'actif'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {sub.statut}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-4 md:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Utilisateur</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Type</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Date début</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Date fin</th>
+                        <th className="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Statut</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {subscriptions.map((sub) => (
+                        <tr key={sub._id} className="hover:bg-gray-50">
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
+                            {sub.utilisateur?.prenom} {sub.utilisateur?.nom}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">{sub.typeAbonnement}</td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {new Date(sub.dateDebut).toLocaleDateString('fr-FR')}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {new Date(sub.dateFin).toLocaleDateString('fr-FR')}
+                          </td>
+                          <td className="px-3 md:px-4 py-3 whitespace-nowrap">
+                            <span
+                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${
+                                sub.statut === 'actif'
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-gray-100 text-gray-800'
+                              }`}
+                            >
+                              {sub.statut}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
         </AdminCardContent>
