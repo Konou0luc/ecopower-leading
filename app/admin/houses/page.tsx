@@ -57,6 +57,7 @@ export default function HousesPage() {
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setHouses([]);
     } finally {
       setLoading(false);
     }

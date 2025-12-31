@@ -20,10 +20,12 @@ export default function NotificationsPage() {
       const response = await adminApiService.getNotifications();
       if (response.data) {
         const data = response.data as any;
-        setNotifications(data.notifications || data.data || Array.isArray(data) ? data : []);
+        let notificationsData = data.notifications || data.data || (Array.isArray(data) ? data : []);
+        setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setNotifications([]);
     } finally {
       setLoading(false);
     }

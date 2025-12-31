@@ -20,10 +20,12 @@ export default function SubscriptionsPage() {
       const response = await adminApiService.getSubscriptions();
       if (response.data) {
         const data = response.data as any;
-        setSubscriptions(data.subscriptions || data.data || Array.isArray(data) ? data : []);
+        let subscriptionsData = data.subscriptions || data.data || (Array.isArray(data) ? data : []);
+        setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setSubscriptions([]);
     } finally {
       setLoading(false);
     }

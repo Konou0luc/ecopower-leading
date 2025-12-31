@@ -24,11 +24,13 @@ export default function BillingPage() {
       if (response.data) {
         // L'API retourne 'factures' selon l'ancien service
         const data = response.data as any;
-        setBills(data.factures || data.bills || data.data || Array.isArray(data) ? data : []);
+        let billsData = data.factures || data.bills || data.data || (Array.isArray(data) ? data : []);
+        setBills(Array.isArray(billsData) ? billsData : []);
       }
     } catch (err: any) {
       console.error('Erreur:', err);
       setError(err.message || 'Erreur lors du chargement des factures');
+      setBills([]);
     } finally {
       setLoading(false);
     }

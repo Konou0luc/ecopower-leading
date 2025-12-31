@@ -21,10 +21,12 @@ export default function LogsPage() {
       const response = await adminApiService.getLogs();
       if (response.data) {
         const data = response.data as any;
-        setLogs(data.logs || data.data || Array.isArray(data) ? data : []);
+        let logsData = data.logs || data.data || (Array.isArray(data) ? data : []);
+        setLogs(Array.isArray(logsData) ? logsData : []);
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setLogs([]);
     } finally {
       setLoading(false);
     }

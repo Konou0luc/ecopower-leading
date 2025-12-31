@@ -21,10 +21,12 @@ export default function ResidentsPage() {
       const response = await adminApiService.getResidents({ search });
       if (response.data) {
         const data = response.data as any;
-        setResidents(data.residents || data.data || Array.isArray(data) ? data : []);
+        let residentsData = data.residents || data.data || (Array.isArray(data) ? data : []);
+        setResidents(Array.isArray(residentsData) ? residentsData : []);
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setResidents([]);
     } finally {
       setLoading(false);
     }

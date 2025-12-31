@@ -34,11 +34,13 @@ export default function UsersPage() {
       const response = await adminApiService.getUsers({ page, limit: 10, search });
       if (response.data) {
         const data = response.data as any;
-        setUsers(data.users || data.data || Array.isArray(data) ? data : []);
+        let usersData = data.users || data.data || (Array.isArray(data) ? data : []);
+        setUsers(Array.isArray(usersData) ? usersData : []);
         setTotal(data.total || 0);
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setUsers([]);
     } finally {
       setLoading(false);
     }

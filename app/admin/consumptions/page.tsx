@@ -44,6 +44,7 @@ export default function ConsumptionsPage() {
       }
     } catch (error) {
       console.error('Erreur:', error);
+      setConsumptions([]);
     } finally {
       setLoading(false);
     }
