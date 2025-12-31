@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "Ecopower - Gestion de Consommation Électrique | Solution Intelligente au Togo",
   description: "Application simple et efficace pour gérer votre consommation électrique au Togo. Suivez vos relevés, générez vos factures automatiquement et gardez le contrôle sur vos dépenses.",
   keywords: "ecopower, gestion électrique, factures, consommation, énergie, Togo, Lomé, gestion résidentielle, suivi consommation, facturation automatique",
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
