@@ -1,52 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Smartphone, BarChart3, FileText, Users, X } from 'lucide-react';
 
 // 4 screenshots sélectionnés pour un design professionnel
 const screenshots = [
   {
-    src: '/assets/screens/Acceder a votre tableau de bord.png',
+    src: '/assets/screens/acceder-tableau-bord.png',
     title: 'Tableau de bord',
     description: 'Vue d\'ensemble de votre consommation énergétique',
     icon: BarChart3,
-    color: 'from-blue-500 to-blue-600',
+    color: 'from-black to-gray-900',
   },
   {
-    src: '/assets/screens/Acceder a l\'historique de vos conso.png',
+    src: '/assets/screens/acceder-historique-conso.png',
     title: 'Historique',
     description: 'Suivez l\'évolution de vos consommations',
     icon: Smartphone,
-    color: 'from-[#FFA800] to-[#FFD700]',
+    color: 'from-black to-gray-900',
   },
   {
-    src: '/assets/screens/Generer des pdf.png',
+    src: '/assets/screens/generer-pdf.png',
     title: 'Facturation',
     description: 'Génération automatique de factures PDF',
     icon: FileText,
-    color: 'from-green-500 to-green-600',
+    color: 'from-black to-gray-900',
   },
   {
-    src: '/assets/screens/Ajouter de nouveaux residents.png',
+    src: '/assets/screens/ajouter-residents.png',
     title: 'Gestion résidents',
     description: 'Administration simplifiée des utilisateurs',
     icon: Users,
-    color: 'from-purple-500 to-purple-600',
+    color: 'from-black to-gray-900',
   },
 ];
 
 export default function ScreenshotsSection() {
   const [selectedScreenshot, setSelectedScreenshot] = useState<number | null>(null);
+  
+  // Gestion du scroll de la page quand le modal est ouvert
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    document.body.style.overflow = selectedScreenshot !== null ? 'hidden' : 'unset';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedScreenshot]);
 
   const openModal = (index: number) => {
     setSelectedScreenshot(index);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setSelectedScreenshot(null);
-    document.body.style.overflow = 'unset';
   };
 
   return (
@@ -66,7 +75,7 @@ export default function ScreenshotsSection() {
               <span className="block bg-gradient-to-r from-[#FFA800] to-[#FFD700] bg-clip-text text-transparent">moderne et intuitive</span>
             </h2>
             <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-light">
-              Découvrez les fonctionnalités clés d'Ecopower à travers une sélection d'écrans
+              Découvrez les fonctionnalités clés d&apos;Ecopower à travers une sélection d&apos;écrans
             </p>
           </div>
 

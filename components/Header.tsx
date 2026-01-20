@@ -8,6 +8,7 @@ import { Menu, X, Download } from 'lucide-react';
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,12 +18,54 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Détection de la section active avec Intersection Observer
+  useEffect(() => {
+    const sections = ['features', 'about', 'screenshots', 'partners', 'download'];
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    // Définir la section active initiale (hero section)
+    const handleInitialScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition < 100) {
+        setActiveSection('');
+      }
+    };
+    window.addEventListener('scroll', handleInitialScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleInitialScroll);
+    };
+  }, []);
+
   const navigation = [
-    { name: 'Fonctionnalités', href: '#features' },
-    { name: 'À propos', href: '#about' },
-    { name: 'Screenshots', href: '#screenshots' },
-    { name: 'Partenaires', href: '#partners' },
-    { name: 'Télécharger', href: '#download' },
+    { name: 'Fonctionnalités', href: '#features', id: 'features' },
+    { name: 'À propos', href: '#about', id: 'about' },
+    { name: 'Screenshots', href: '#screenshots', id: 'screenshots' },
+    { name: 'Partenaires', href: '#partners', id: 'partners' },
+    { name: 'Télécharger', href: '#download', id: 'download' },
   ];
 
   return (
@@ -57,7 +100,11 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-4 py-2 text-gray-700 hover:text-[#FFA800] transition-colors font-medium text-sm rounded-lg hover:bg-gray-50"
+                className={`px-4 py-2 transition-colors font-medium text-sm rounded-lg ${
+                  activeSection === item.id
+                    ? 'text-[#FFA800] bg-[#FFA800]/10'
+                    : 'text-gray-700 hover:text-[#FFA800] hover:bg-gray-50'
+                }`}
               >
                 {item.name}
               </Link>
@@ -96,7 +143,11 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-4 py-3 text-gray-700 hover:text-[#FFA800] hover:bg-gray-50 transition-colors font-medium rounded-lg"
+                  className={`px-4 py-3 transition-colors font-medium rounded-lg ${
+                    activeSection === item.id
+                      ? 'text-[#FFA800] bg-[#FFA800]/10'
+                      : 'text-gray-700 hover:text-[#FFA800] hover:bg-gray-50'
+                  }`}
                 >
                   {item.name}
                 </Link>
