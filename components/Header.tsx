@@ -20,7 +20,7 @@ export default function Header() {
 
   // Détection de la section active avec Intersection Observer
   useEffect(() => {
-    const sections = ['features', 'about', 'screenshots', 'partners', 'download'];
+    const sections = ['features', 'pricing', 'about', 'screenshots', 'partners', 'download'];
     
     const observerOptions = {
       root: null,
@@ -62,6 +62,7 @@ export default function Header() {
 
   const navigation = [
     { name: 'Fonctionnalités', href: '#features', id: 'features' },
+    { name: 'Tarifs', href: '#pricing', id: 'pricing' },
     { name: 'À propos', href: '#about', id: 'about' },
     { name: 'Screenshots', href: '#screenshots', id: 'screenshots' },
     { name: 'Partenaires', href: '#partners', id: 'partners' },
