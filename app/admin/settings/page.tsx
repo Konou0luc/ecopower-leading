@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Settings, Save, AlertCircle, CheckCircle, Activity, Server } from 'lucide-react';
+import { Settings, Save, AlertCircle, CheckCircle, Activity, Server, Mail, Phone, Globe, FileText } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
 import { AdminButton } from '@/components/admin/ui/AdminButton';
 import adminApiService from '@/services/adminApiService';
@@ -149,6 +149,83 @@ export default function SettingsPage() {
           <p>{message.text}</p>
         </div>
       )}
+
+      {/* Paramètres de contact - affichés dans l'app (À propos) */}
+      <AdminCard>
+        <AdminCardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Mail size={20} className="text-[#FFA800]" />
+              <AdminCardTitle>Paramètres de contact</AdminCardTitle>
+            </div>
+            <AdminButton onClick={handleSaveAppInfo} disabled={savingAppInfo}>
+              <Save size={18} className="mr-2" />
+              {savingAppInfo ? 'Enregistrement...' : 'Enregistrer'}
+            </AdminButton>
+          </div>
+        </AdminCardHeader>
+        <AdminCardContent className="space-y-4">
+          <p className="text-sm text-gray-600 mb-4">
+            Ces informations sont affichées dans l&apos;application mobile (Paramètres → À propos). Modifiez-les ici pour les mettre à jour partout.
+          </p>
+          {loadingAppInfo ? (
+            <div className="py-8 flex justify-center">
+              <LoadingSpinner />
+            </div>
+          ) : (
+          <>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <Mail size={14} className="inline mr-1" /> Email de contact
+            </label>
+            <input
+              type="email"
+              value={appInfo.email}
+              onChange={(e) => setAppInfo({ ...appInfo, email: e.target.value })}
+              placeholder="exemple@ecopower.com"
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <Phone size={14} className="inline mr-1" /> Téléphone
+            </label>
+            <input
+              type="text"
+              value={appInfo.phone}
+              onChange={(e) => setAppInfo({ ...appInfo, phone: e.target.value })}
+              placeholder="+228 97 24 04 60"
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <Globe size={14} className="inline mr-1" /> Site web
+            </label>
+            <input
+              type="url"
+              value={appInfo.website}
+              onChange={(e) => setAppInfo({ ...appInfo, website: e.target.value })}
+              placeholder="https://ecopower-web.vercel.app"
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <FileText size={14} className="inline mr-1" /> Description (optionnel)
+            </label>
+            <textarea
+              value={appInfo.description}
+              onChange={(e) => setAppInfo({ ...appInfo, description: e.target.value })}
+              placeholder="Ecopower vous aide à gérer votre électricité en toute simplicité"
+              rows={3}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          </>
+          )}
+        </AdminCardContent>
+      </AdminCard>
 
       {/* General Settings */}
       <AdminCard>

@@ -262,6 +262,18 @@ class AdminApiService {
   async getSystemInfo() {
     return this.request('/admin/system/info');
   }
+
+  // Paramètres de contact (email, téléphone, site web) - affichés dans l'app
+  async getAppInfo() {
+    return this.request<{ email: string; phone: string; website: string; description: string }>('/admin/app-info');
+  }
+
+  async updateAppInfo(data: { email?: string; phone?: string; website?: string; description?: string }) {
+    return this.request('/admin/app-info', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 const adminApiService = new AdminApiService();
