@@ -16,6 +16,7 @@ export default function PrivacyPolicyPage() {
       content: [
         'Ecopower collecte les données suivantes lorsque vous utilisez notre application :',
         '• Informations d\'identification : nom, prénom, adresse email, numéro de téléphone',
+        '• Données de localisation : coordonnées GPS (latitude, longitude) recueillies lors de l\'inscription pour associer votre compte à votre lieu de résidence et optimiser nos services. Cette collecte est facultative et requiert votre consentement explicite.',
         '• Données de consommation : relevés de compteur, historique de consommation électrique',
         '• Données de facturation : informations nécessaires à la génération de factures',
         '• Données techniques : adresse IP, type d\'appareil, système d\'exploitation, identifiants uniques',
@@ -28,6 +29,7 @@ export default function PrivacyPolicyPage() {
       content: [
         'Nous utilisons vos données personnelles pour :',
         '• Fournir et améliorer nos services de gestion de consommation électrique',
+        '• Associer votre compte à votre lieu de résidence (via les données de localisation) pour une meilleure expérience utilisateur',
         '• Générer vos factures et documents administratifs',
         '• Vous contacter concernant votre compte ou nos services',
         '• Analyser l\'utilisation de l\'application pour améliorer l\'expérience utilisateur',
@@ -123,7 +125,7 @@ export default function PrivacyPolicyPage() {
               <span className="block bg-gradient-to-r from-[#FFA800] to-[#FFD700] bg-clip-text text-transparent">Confidentialité</span>
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              Dernière mise à jour : 22 février 2026
             </p>
           </div>
 
@@ -164,8 +166,7 @@ export default function PrivacyPolicyPage() {
           <div className="mt-12 bg-gray-50 rounded-3xl p-8 border border-gray-200">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Questions ou préoccupations ?</h3>
             <p className="text-gray-700 mb-4">
-              Si vous avez des questions concernant cette politique de confidentialité ou souhaitez exercer vos droits, 
-              n'hésitez pas à nous contacter :
+              Si vous avez des questions concernant cette politique de confidentialité ou souhaitez exercer vos droits, n&apos;hésitez pas à nous contacter :
             </p>
             <div className="space-y-2">
               <p className="text-gray-700">

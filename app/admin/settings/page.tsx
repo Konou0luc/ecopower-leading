@@ -38,11 +38,20 @@ interface AppInfoData {
   phone: string;
   website: string;
   description: string;
+  guideRapideUrl: string;
+  privacyPolicyUrl: string;
 }
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>({});
-  const [appInfo, setAppInfo] = useState<AppInfoData>({ email: '', phone: '', website: '', description: '' });
+  const [appInfo, setAppInfo] = useState<AppInfoData>({
+    email: '',
+    phone: '',
+    website: '',
+    description: '',
+    guideRapideUrl: '',
+    privacyPolicyUrl: '',
+  });
   const [systemInfo, setSystemInfo] = useState<SystemInfo>({});
   const [loading, setLoading] = useState(true);
   const [loadingSystemInfo, setLoadingSystemInfo] = useState(true);
@@ -67,6 +76,8 @@ export default function SettingsPage() {
           phone: response.data.phone || '',
           website: response.data.website || '',
           description: response.data.description || '',
+          guideRapideUrl: response.data.guideRapideUrl || '',
+          privacyPolicyUrl: response.data.privacyPolicyUrl || '',
         });
       }
     } catch (error) {
@@ -210,7 +221,7 @@ export default function SettingsPage() {
         </AdminCardHeader>
         <AdminCardContent className="space-y-4">
           <p className="text-sm text-gray-600 mb-4">
-            Ces informations sont affichées dans l&apos;application mobile (Paramètres → À propos). Modifiez-les ici pour les mettre à jour partout.
+            Ces informations sont affichées dans l&apos;application mobile (Paramètres → À propos et Centre d&apos;aide). Modifiez-les ici pour les mettre à jour partout.
           </p>
           {loadingAppInfo ? (
             <div className="py-8 flex justify-center">
@@ -263,6 +274,30 @@ export default function SettingsPage() {
               onChange={(e) => setAppInfo({ ...appInfo, description: e.target.value })}
               placeholder="Ecopower vous aide à gérer votre électricité en toute simplicité"
               rows={3}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <Globe size={14} className="inline mr-1" /> Guide rapide (Centre d&apos;aide)
+            </label>
+            <input
+              type="url"
+              value={appInfo.guideRapideUrl}
+              onChange={(e) => setAppInfo({ ...appInfo, guideRapideUrl: e.target.value })}
+              placeholder="https://ecopowers.online/guide-rapide"
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <Globe size={14} className="inline mr-1" /> Politique de confidentialité
+            </label>
+            <input
+              type="url"
+              value={appInfo.privacyPolicyUrl}
+              onChange={(e) => setAppInfo({ ...appInfo, privacyPolicyUrl: e.target.value })}
+              placeholder="https://ecopowers.online/privacy-policy"
               className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
             />
           </div>
