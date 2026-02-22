@@ -33,18 +33,62 @@ interface SystemInfo {
   timestamp?: string;
 }
 
+interface AppInfoData {
+  email: string;
+  phone: string;
+  website: string;
+  description: string;
+}
+
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>({});
+  const [appInfo, setAppInfo] = useState<AppInfoData>({ email: '', phone: '', website: '', description: '' });
   const [systemInfo, setSystemInfo] = useState<SystemInfo>({});
   const [loading, setLoading] = useState(true);
   const [loadingSystemInfo, setLoadingSystemInfo] = useState(true);
+  const [loadingAppInfo, setLoadingAppInfo] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingAppInfo, setSavingAppInfo] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     loadSettings();
     loadSystemInfo();
+    loadAppInfo();
   }, []);
+
+  const loadAppInfo = async () => {
+    setLoadingAppInfo(true);
+    try {
+      const response = await adminApiService.getAppInfo();
+      if (response.data) {
+        setAppInfo({
+          email: response.data.email || '',
+          phone: response.data.phone || '',
+          website: response.data.website || '',
+          description: response.data.description || '',
+        });
+      }
+    } catch (error) {
+      console.error('Erreur chargement paramètres contact:', error);
+    } finally {
+      setLoadingAppInfo(false);
+    }
+  };
+
+  const handleSaveAppInfo = async () => {
+    setSavingAppInfo(true);
+    setMessage(null);
+    try {
+      await adminApiService.updateAppInfo(appInfo);
+      setMessage({ type: 'success', text: 'Paramètres de contact enregistrés. Ils seront visibles dans l\'app mobile.' });
+      setTimeout(() => setMessage(null), 4000);
+    } catch (error: unknown) {
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Erreur lors de la sauvegarde' });
+    } finally {
+      setSavingAppInfo(false);
+    }
+  };
 
   const loadSettings = async () => {
     setLoading(true);
