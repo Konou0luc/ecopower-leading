@@ -21,7 +21,7 @@ export default function LogsPage() {
       const response = await adminApiService.getLogs();
       if (response.data) {
         const data = response.data as any;
-        let logsData = data.logs || data.data || (Array.isArray(data) ? data : []);
+        const logsData = data.logs || data.data || (Array.isArray(data) ? data : []);
         setLogs(Array.isArray(logsData) ? logsData : []);
       }
     } catch (error) {

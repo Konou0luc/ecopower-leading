@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Home, Plus, Search, Edit, Trash2, MapPin } from 'lucide-react';
+import { Home, Plus, Search, Trash2, MapPin } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
 import { AdminButton } from '@/components/admin/ui/AdminButton';
+import { DeleteConfirmModal } from '@/components/admin/ui/DeleteConfirmModal';
 import adminApiService from '@/services/adminApiService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
 
@@ -39,19 +40,24 @@ export default function HousesPage() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
+  // Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [houseToDelete, setHouseToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  // Notification State
+  const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+
   const loadHouses = useCallback(async () => {
     try {
       setLoading(true);
       const response = await adminApiService.getHouses({ page, limit: 10, search });
-      console.log('Réponse API maisons:', response);
       if (response.data) {
-        // L'API retourne 'maisons' (en français) selon la structure de l'API
         const data = (response.data as Record<string, unknown>).maisons 
           || (response.data as Record<string, unknown>).houses 
           || (response.data as Record<string, unknown>).data 
           || [];
         const pagination = (response.data as Record<string, unknown>).pagination as { total?: number } | undefined;
-        console.log('Données de maisons:', data);
         setHouses(Array.isArray(data) ? data : []);
         setTotal(pagination?.total || (response.data as Record<string, unknown>).total as number || 0);
       }
@@ -67,14 +73,29 @@ export default function HousesPage() {
     loadHouses();
   }, [loadHouses]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cette maison ?')) return;
+  const confirmDelete = (id: string) => {
+    setHouseToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!houseToDelete) return;
     
     try {
-      await adminApiService.deleteHouse(id);
+      setIsDeleting(true);
+      await adminApiService.deleteHouse(houseToDelete);
+      setNotification({ message: 'Maison supprimée avec succès.', type: 'success' });
+      setDeleteModalOpen(false);
+      setHouseToDelete(null);
       loadHouses();
     } catch (error) {
       console.error('Erreur:', error);
+      setNotification({ message: 'Erreur lors de la suppression de la maison.', type: 'error' });
+      setDeleteModalOpen(false);
+    } finally {
+      setIsDeleting(false);
+      // Auto-hide notification
+      setTimeout(() => setNotification(null), 5000);
     }
   };
 
@@ -83,7 +104,26 @@ export default function HousesPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 w-full max-w-full">
+    <div className="space-y-4 md:space-y-6 w-full max-w-full relative">
+      {/* Notifications */}
+      {notification && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-4 ${
+          notification.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          <span className="font-semibold">{notification.message}</span>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal 
+        isOpen={deleteModalOpen}
+        onClose={() => !isDeleting && setDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Supprimer la maison"
+        message="Êtes-vous sûr de vouloir supprimer cette maison ? Cette action est irréversible et supprimera toutes les factures et consommations associées."
+        isLoading={isDeleting}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -168,16 +208,14 @@ export default function HousesPage() {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
-                    <button className="flex-1 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-sm font-semibold">
-                      <Edit size={16} className="inline mr-1" />
-                      Modifier
-                    </button>
+                  <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200">
                     <button
-                      onClick={() => handleDelete(house._id || house.id || '')}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => confirmDelete(house._id || house.id || '')}
+                      className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors text-red-500"
+                      title="Supprimer"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={16} className="inline mr-1" />
+                      Supprimer la maison
                     </button>
                   </div>
                 </AdminCardContent>
@@ -189,7 +227,7 @@ export default function HousesPage() {
 
       {/* Pagination */}
       {total > 10 && (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
           <p className="text-sm text-gray-600">
             Page {page} sur {Math.ceil(total / 10)}
           </p>

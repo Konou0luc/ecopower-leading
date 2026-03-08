@@ -12,12 +12,14 @@ import {
   Home,
   FileText,
   Zap,
-  CreditCard
+  CreditCard,
+  MapPin
 } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
 import { AdminButton } from '@/components/admin/ui/AdminButton';
 import adminApiService from '@/services/adminApiService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
+import UserLocationMap from '@/components/admin/UserLocationMap';
 
 interface User {
   _id: string;
@@ -29,6 +31,11 @@ interface User {
   createdAt?: string;
   updatedAt?: string;
   statut?: string;
+  homeLatitude?: number;
+  homeLongitude?: number;
+  homeCity?: string;
+  homeCountry?: string;
+  homeLocationSource?: string;
   maisonId?: string | {
     _id?: string;
     nomMaison?: string;
@@ -177,6 +184,8 @@ export default function UserDetailsPage() {
     ? user.idProprietaire
     : null;
 
+  const hasLocation = user.homeLatitude != null && user.homeLongitude != null;
+
   return (
     <div className="space-y-4 md:space-y-6 w-full max-w-full">
       {/* Header */}
@@ -258,6 +267,45 @@ export default function UserDetailsPage() {
               </div>
             )}
           </div>
+        </AdminCardContent>
+      </AdminCard>
+
+      {/* Geolocation Map */}
+      <AdminCard>
+        <AdminCardHeader>
+          <AdminCardTitle className="flex items-center gap-2">
+            <MapPin className="text-[#FFA800]" size={20} />
+            Position Géographique
+          </AdminCardTitle>
+        </AdminCardHeader>
+        <AdminCardContent>
+          {hasLocation ? (
+            <div className="w-full relative z-0">
+              <UserLocationMap 
+                latitude={user.homeLatitude!} 
+                longitude={user.homeLongitude!} 
+                userName={`${user.prenom} ${user.nom}`}
+                city={user.homeCity}
+                country={user.homeCountry}
+                locationSource={user.homeLocationSource}
+              />
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="p-3 bg-gray-50 rounded text-sm">
+                  <span className="text-gray-500 block mb-1">Latitude</span>
+                  <span className="font-mono text-gray-900">{user.homeLatitude}</span>
+                </div>
+                <div className="p-3 bg-gray-50 rounded text-sm">
+                  <span className="text-gray-500 block mb-1">Longitude</span>
+                  <span className="font-mono text-gray-900">{user.homeLongitude}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-100">
+              <MapPin size={32} className="mx-auto text-gray-400 mb-3" />
+              <p className="text-gray-600">Aucune coordonnée GPS enregistrée pour cet utilisateur.</p>
+            </div>
+          )}
         </AdminCardContent>
       </AdminCard>
 

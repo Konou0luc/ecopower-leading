@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Receipt, Search, Download } from 'lucide-react';
+import { Receipt, Search, Download, Filter } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
+import { AdminButton } from '@/components/admin/ui/AdminButton';
 import adminApiService from '@/services/adminApiService';
 import { generateInvoicePdf } from '@/services/pdfService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
@@ -48,22 +49,30 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [downloading, setDownloading] = useState<string | null>(null);
 
   useEffect(() => {
     loadBills();
-  }, [search]);
+  }, [page, search, statusFilter]);
 
   const loadBills = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await adminApiService.getBills({ search });
+      const queryParams: any = { page, limit: 10, search };
+      if (statusFilter) {
+        queryParams.statut = statusFilter;
+      }
+      const response = await adminApiService.getBills(queryParams);
       if (response.data) {
         // L'API retourne 'factures' selon l'ancien service
         const data = response.data as any;
-        let billsData = data.factures || data.bills || data.data || (Array.isArray(data) ? data : []);
+        const billsData = data.factures || data.bills || data.data || (Array.isArray(data) ? data : []);
         setBills(Array.isArray(billsData) ? billsData : []);
+        setTotal(data.pagination?.total || data.total || 0);
       }
     } catch (err: any) {
       console.error('Erreur:', err);
@@ -184,7 +193,7 @@ export default function BillingPage() {
     }
   };
 
-  if (loading) {
+  if (loading && bills.length === 0) {
     return <LoadingSpinner fullScreen />;
   }
 
@@ -202,24 +211,40 @@ export default function BillingPage() {
         </div>
       )}
 
+      {/* Filters & Search */}
       <AdminCard>
         <AdminCardContent>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher une facture..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher une facture..."
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              />
+            </div>
+            <div className="relative md:w-64">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full pl-10 pr-10 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent appearance-none"
+              >
+                <option value="">Tous les statuts</option>
+                <option value="payée">Payée</option>
+                <option value="en attente">En attente</option>
+                <option value="en retard">En retard</option>
+              </select>
+            </div>
           </div>
         </AdminCardContent>
       </AdminCard>
 
       <AdminCard>
         <AdminCardHeader>
-          <AdminCardTitle>{bills.length} facture{bills.length > 1 ? 's' : ''}</AdminCardTitle>
+          <AdminCardTitle>{total} facture{total > 1 ? 's' : ''}</AdminCardTitle>
         </AdminCardHeader>
         <AdminCardContent>
           {bills.length === 0 ? (
@@ -299,6 +324,33 @@ export default function BillingPage() {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {total > 10 && (
+            <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+              <p className="text-sm text-gray-600">
+                Page {page} sur {Math.ceil(total / 10)}
+              </p>
+              <div className="flex gap-2">
+                <AdminButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                >
+                  Précédent
+                </AdminButton>
+                <AdminButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(p => p + 1)}
+                  disabled={page >= Math.ceil(total / 10)}
+                >
+                  Suivant
+                </AdminButton>
               </div>
             </div>
           )}

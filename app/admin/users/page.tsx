@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Users, Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import { Users, Plus, Search, Trash2, Eye, Filter } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
 import { AdminButton } from '@/components/admin/ui/AdminButton';
+import { DeleteConfirmModal } from '@/components/admin/ui/DeleteConfirmModal';
 import adminApiService from '@/services/adminApiService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
 
@@ -22,22 +23,35 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
+  // Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  // Notification State
+  const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+
   useEffect(() => {
     loadUsers();
-  }, [page, search]);
+  }, [page, search, roleFilter]);
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const response = await adminApiService.getUsers({ page, limit: 10, search });
+      const queryParams: any = { page, limit: 10, search };
+      if (roleFilter) {
+        queryParams.role = roleFilter;
+      }
+      const response = await adminApiService.getUsers(queryParams);
       if (response.data) {
         const data = response.data as any;
-        let usersData = data.users || data.data || (Array.isArray(data) ? data : []);
+        const usersData = data.users || data.data || (Array.isArray(data) ? data : []);
         setUsers(Array.isArray(usersData) ? usersData : []);
-        setTotal(data.total || 0);
+        setTotal(data.pagination?.total || data.total || 0);
       }
     } catch (error) {
       console.error('Erreur:', error);
@@ -47,14 +61,29 @@ export default function UsersPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return;
+  const confirmDelete = (id: string) => {
+    setUserToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!userToDelete) return;
     
     try {
-      await adminApiService.deleteUser(id);
+      setIsDeleting(true);
+      await adminApiService.deleteUser(userToDelete);
+      setNotification({ message: 'Utilisateur supprimé avec succès.', type: 'success' });
+      setDeleteModalOpen(false);
+      setUserToDelete(null);
       loadUsers();
     } catch (error) {
       console.error('Erreur:', error);
+      setNotification({ message: 'Erreur lors de la suppression de l\'utilisateur.', type: 'error' });
+      setDeleteModalOpen(false);
+    } finally {
+      setIsDeleting(false);
+      // Auto-hide notification
+      setTimeout(() => setNotification(null), 5000);
     }
   };
 
@@ -67,7 +96,26 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 w-full max-w-full">
+    <div className="space-y-4 md:space-y-6 w-full max-w-full relative">
+      {/* Notifications */}
+      {notification && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-4 ${
+          notification.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          <span className="font-semibold">{notification.message}</span>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal 
+        isOpen={deleteModalOpen}
+        onClose={() => !isDeleting && setDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Supprimer l'utilisateur"
+        message="Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible et supprimera toutes les données associées (maisons, factures, consommations)."
+        isLoading={isDeleting}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -80,18 +128,33 @@ export default function UsersPage() {
         </AdminButton>
       </div>
 
-      {/* Search */}
+      {/* Filters & Search */}
       <AdminCard>
         <AdminCardContent>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher un utilisateur..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher un utilisateur..."
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              />
+            </div>
+            <div className="relative md:w-64">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="w-full pl-10 pr-10 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent appearance-none"
+              >
+                <option value="">Tous les rôles</option>
+                <option value="admin">Administrateur</option>
+                <option value="proprietaire">Propriétaire/Gérant</option>
+                <option value="resident">Résident</option>
+              </select>
+            </div>
           </div>
         </AdminCardContent>
       </AdminCard>
@@ -145,12 +208,10 @@ export default function UsersPage() {
                               >
                                 <Eye size={18} />
                               </button>
-                              <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors">
-                                <Edit size={18} />
-                              </button>
                               <button
-                                onClick={() => handleDelete(user._id)}
-                                className="p-2 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                onClick={() => confirmDelete(user._id)}
+                                className="p-2 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors text-red-500"
+                                title="Supprimer"
                               >
                                 <Trash2 size={18} />
                               </button>

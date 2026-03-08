@@ -30,7 +30,7 @@ export default function NotificationsPage() {
       const response = await adminApiService.getNotifications();
       if (response.data) {
         const data = response.data as any;
-        let notificationsData = data.notifications || data.data || (Array.isArray(data) ? data : []);
+        const notificationsData = data.notifications || data.data || (Array.isArray(data) ? data : []);
         setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
       }
     } catch (error) {
@@ -186,7 +186,7 @@ export default function NotificationsPage() {
                 <select
                   id="broadcast-role"
                   value={broadcastForm.role}
-                  onChange={(e) => setBroadcastForm({ ...broadcastForm, role: e.target.value as any })}
+                  onChange={(e) => setBroadcastForm({ ...broadcastForm, role: e.target.value as '' | 'proprietaire' | 'resident' | 'admin' })}
                   className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
                 >
                   <option value="">Tous les utilisateurs</option>
@@ -195,7 +195,7 @@ export default function NotificationsPage() {
                   <option value="admin">Admins uniquement</option>
                 </select>
                 <p className="mt-1 text-xs text-gray-500">
-                  Si aucun rôle n'est sélectionné, la notification sera envoyée à tous les utilisateurs avec un deviceToken
+                  Si aucun rôle n &apos;est sélectionné, la notification sera envoyée à tous les utilisateurs avec un deviceToken
                 </p>
               </div>
 

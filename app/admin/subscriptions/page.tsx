@@ -20,7 +20,7 @@ export default function SubscriptionsPage() {
       const response = await adminApiService.getSubscriptions();
       if (response.data) {
         const data = response.data as any;
-        let subscriptionsData = data.subscriptions || data.data || (Array.isArray(data) ? data : []);
+        const subscriptionsData = data.subscriptions || data.data || (Array.isArray(data) ? data : []);
         setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
       }
     } catch (error) {
