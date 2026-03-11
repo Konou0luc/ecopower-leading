@@ -288,6 +288,14 @@ class AdminApiService {
       body: JSON.stringify(data),
     });
   }
+
+  // Auth / Security
+  async changePassword(payload: { motDePasseActuel: string; nouveauMotDePasse: string }) {
+    return this.request('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
 }
 
 const adminApiService = new AdminApiService();

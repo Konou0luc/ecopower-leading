@@ -1,23 +1,59 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Mail, Phone, Save, Lock } from 'lucide-react';
+import { User, Mail, Phone, Save, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { AdminCard, AdminCardContent, AdminCardHeader, AdminCardTitle } from '@/components/admin/ui/AdminCard';
 import { AdminButton } from '@/components/admin/ui/AdminButton';
 import { useAuth } from '@/contexts/AuthContext';
+import adminApiService from '@/services/adminApiService';
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const [currentPassword, setCurrentPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const handleSavePassword = () => {
-    if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas');
+  const handleSavePassword = async () => {
+    setMessage(null);
+
+    if (!currentPassword || !password || !confirmPassword) {
+      setMessage({ type: 'error', text: 'Veuillez remplir tous les champs.' });
       return;
     }
-    // TODO: Implémenter le changement de mot de passe
-    alert('Fonctionnalité à implémenter');
+
+    if (password !== confirmPassword) {
+      setMessage({ type: 'error', text: 'Les nouveaux mots de passe ne correspondent pas.' });
+      return;
+    }
+
+    if (password.length < 8) {
+      setMessage({ type: 'error', text: 'Le mot de passe doit contenir au moins 8 caractères.' });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await adminApiService.changePassword({
+        motDePasseActuel: currentPassword,
+        nouveauMotDePasse: password,
+      });
+      setMessage({ type: 'success', text: 'Mot de passe mis à jour avec succès.' });
+      setCurrentPassword('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (error: unknown) {
+      setMessage({
+        type: 'error',
+        text:
+          error instanceof Error
+            ? error.message
+            : 'Erreur lors du changement de mot de passe.',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,12 +117,53 @@ export default function ProfilePage() {
         </AdminCardHeader>
         <AdminCardContent>
           <div className="space-y-4">
+            {message && (
+              <div
+                className={`p-3 rounded-lg flex items-center gap-2 text-sm ${
+                  message.type === 'success'
+                    ? 'bg-green-50 text-green-800 border border-green-200'
+                    : 'bg-red-50 text-red-800 border border-red-200'
+                }`}
+              >
+                {message.type === 'success' ? (
+                  <CheckCircle size={18} />
+                ) : (
+                  <AlertCircle size={18} />
+                )}
+                <p>{message.text}</p>
+              </div>
+            )}
+            <p className="text-sm text-gray-600">
+              Pour des raisons de sécurité, utilisez un mot de passe d&apos;au moins 8 caractères avec des
+              majuscules, minuscules, chiffres et caractères spéciaux.
+            </p>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Mot de passe actuel
+              </label>
+              <div className="relative">
+                <Lock
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Nouveau mot de passe
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="password"
                   value={password}
@@ -98,10 +175,13 @@ export default function ProfilePage() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Confirmer le mot de passe
+                Confirmer le nouveau mot de passe
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="password"
                   value={confirmPassword}
@@ -111,9 +191,9 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
-            <AdminButton onClick={handleSavePassword}>
+            <AdminButton onClick={handleSavePassword} disabled={loading}>
               <Save size={18} className="mr-2" />
-              Enregistrer le nouveau mot de passe
+              {loading ? 'Enregistrement...' : 'Enregistrer le nouveau mot de passe'}
             </AdminButton>
           </div>
         </AdminCardContent>
