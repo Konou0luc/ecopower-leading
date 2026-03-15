@@ -6,12 +6,13 @@ import { Home, Building2, Layers, Check, Star } from 'lucide-react';
 const plans = [
   {
     name: 'Basic',
-    monthlyPrice: 500,
+    monthlyPrice: 1000,
     description: 'Idéal pour les petites propriétés',
     popular: false,
     icon: Home,
     features: [
-      'Gestion jusqu\'à 5 résidents',
+      'Gestion de 2 maisons',
+      'Jusqu\'à 5 résidents par maison',
       'Factures automatiques',
       'Relevés de compteur',
       'Historique des consommations',
@@ -22,13 +23,14 @@ const plans = [
   },
   {
     name: 'Premium',
-    monthlyPrice: 1000,
+    monthlyPrice: 2000,
     description: 'Parfait pour les propriétés moyennes',
     popular: true,
     icon: Building2,
     features: [
       'Tout du plan Basic',
-      'Gestion jusqu\'à 15 résidents',
+      'Gestion de 3 maisons',
+      'Jusqu\'à 7 résidents par maison',
       'Statistiques avancées',
       'Rappels de paiement',
       'Suivi des factures en retard',
@@ -40,13 +42,14 @@ const plans = [
   },
   {
     name: 'Enterprise',
-    monthlyPrice: 2000,
+    monthlyPrice: 5000,
     description: 'Pour les grandes propriétés',
     popular: false,
     icon: Layers,
     features: [
       'Tout du plan Premium',
-      'Gestion jusqu\'à 50 résidents',
+      'Gestion de 4 maisons',
+      'Jusqu\'à 10 résidents par maison',
       'Support prioritaire email',
       'Assistance personnalisée',
       'Demandes de fonctionnalités prioritaires',
