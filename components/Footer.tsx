@@ -13,6 +13,7 @@ const footerLinks = {
   support: [
     { name: 'À propos', href: '#about' },
     { name: 'Partenaires', href: '#partners' },
+    { name: 'Guide rapide', href: '/guide-rapide' },
     { name: 'Contact', href: '/contact' },
   ],
   legal: [
