@@ -174,18 +174,30 @@ export default function BillingPage() {
         currentIndex: consumption.currentIndex,
       };
 
+      const billId = bill._id || bill.id || '';
+      const consommationIdStr =
+        (bill.consommationId as { _id?: string; id?: string } | undefined)?._id
+        || (bill.consommationId as { id?: string } | undefined)?.id
+        || (consumption as { id?: string; _id?: string }).id
+        || (consumption as { id?: string; _id?: string })._id
+        || '';
+
+      if (!billId.trim() || !consommationIdStr.trim()) {
+        document.body.removeChild(loadingMessage);
+        alert('Données facture incomplètes (identifiants manquants).');
+        setDownloading(null);
+        return;
+      }
+
       const billData = {
-        _id: bill._id || bill.id,
+        _id: billId,
         numeroFacture: bill.numeroFacture,
         montant: bill.montant || bill.montantTotal || 0,
         dateEmission: bill.dateEmission || bill.dateFacture || new Date().toISOString(),
         datePaiement: undefined,
         statut: bill.statut || 'en attente',
         consommationId: {
-          _id: (bill.consommationId as { _id?: string; id?: string } | undefined)?._id
-            || (bill.consommationId as { id?: string } | undefined)?.id
-            || consumption.id
-            || consumption._id,
+          _id: consommationIdStr,
           kwh: consumptionData.kwh,
           mois: consumptionData.mois,
           annee: consumptionData.annee,
