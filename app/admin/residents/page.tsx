@@ -34,7 +34,13 @@ export default function ResidentsPage() {
       if (response.data) {
         const data = response.data as any;
         const residentsData = data.residents || data.data || (Array.isArray(data) ? data : []);
-        setResidents(Array.isArray(residentsData) ? residentsData : []);
+        const list = Array.isArray(residentsData) ? residentsData : [];
+        setResidents(
+          list.map((r: { id?: string; _id?: string; [key: string]: unknown }) => ({
+            ...r,
+            id: r.id ?? r._id ?? '',
+          }))
+        );
         setTotal(data.pagination?.total || data.total || 0);
       }
     } catch (error) {
@@ -142,7 +148,7 @@ export default function ResidentsPage() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {residents.map((resident) => (
-                        <tr key={resident._id} className="hover:bg-gray-50">
+                        <tr key={resident.id} className="hover:bg-gray-50">
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
                             {resident.prenom} {resident.nom}
                           </td>
@@ -153,7 +159,7 @@ export default function ResidentsPage() {
                           </td>
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                             <button
-                              onClick={() => confirmDelete(resident._id)}
+                              onClick={() => confirmDelete(resident.id)}
                               className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors text-red-500"
                               title="Supprimer"
                             >

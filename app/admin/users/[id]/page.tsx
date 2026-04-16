@@ -135,8 +135,11 @@ export default function UserDetailsPage() {
     if (typeof address === 'object') {
       const parts = [];
       if (address.rue) parts.push(address.rue);
+      if (address.adresseRue) parts.push(address.adresseRue);
       if (address.ville) parts.push(address.ville);
+      if (address.adresseVille) parts.push(address.adresseVille);
       if (address.pays) parts.push(address.pays);
+      if (address.adressePays) parts.push(address.adressePays);
       return parts.length > 0 ? parts.join(', ') : 'N/A';
     }
     return 'N/A';
@@ -214,7 +217,7 @@ export default function UserDetailsPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-1">
                 {user.prenom} {user.nom}
               </h2>
-              <p className="text-sm text-gray-500">ID: {user._id}</p>
+              <p className="text-sm text-gray-500">ID: {(user as { id?: string }).id ?? user._id}</p>
             </div>
             <div className="flex gap-2">
               <AdminButton variant="outline" onClick={() => router.push(`/admin/users`)}>
@@ -323,7 +326,7 @@ export default function UserDetailsPage() {
                   {maison.nomMaison || 'N/A'}
                 </p>
                 <p className="text-sm text-gray-600">
-                  {formatAddress(maison.adresse)}
+                  {formatAddress(maison.adresse ?? maison)}
                 </p>
               </div>
             </div>
@@ -341,7 +344,7 @@ export default function UserDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 mb-1">Type</p>
-                <p className="text-base font-semibold text-gray-900">{abonnement.typeAbonnement || 'N/A'}</p>
+                <p className="text-base font-semibold text-gray-900">{(abonnement as { type?: string; typeAbonnement?: string }).typeAbonnement || (abonnement as { type?: string }).type || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 mb-1">Statut</p>

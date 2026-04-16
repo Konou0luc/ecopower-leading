@@ -77,7 +77,7 @@ export default function ContactPage() {
 
     try {
       // Envoyer le message via mailto ou API
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ecopower-api.vercel.app';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
       
       const response = await fetch(`${apiUrl}/contact`, {
         method: 'POST',

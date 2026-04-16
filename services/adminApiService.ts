@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ecopower-api.vercel.app';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 interface ApiResponse<T> {
   data?: T;
@@ -79,11 +79,12 @@ class AdminApiService {
   }
 
   // Users
-  async getUsers(params?: { page?: number; limit?: number; search?: string }) {
+  async getUsers(params?: { page?: number; limit?: number; search?: string; role?: string }) {
     const query = new URLSearchParams();
     if (params?.page) query.append('page', params.page.toString());
     if (params?.limit) query.append('limit', params.limit.toString());
     if (params?.search) query.append('search', params.search);
+    if (params?.role) query.append('role', params.role);
     
     return this.request(`/admin/users?${query.toString()}`);
   }
@@ -157,11 +158,13 @@ class AdminApiService {
   }
 
   // Consumptions
-  async getConsumptions(params?: { page?: number; limit?: number; search?: string }) {
+  async getConsumptions(params?: { page?: number; limit?: number; search?: string; annee?: string; mois?: string }) {
     const query = new URLSearchParams();
     if (params?.page) query.append('page', params.page.toString());
     if (params?.limit) query.append('limit', params.limit.toString());
     if (params?.search) query.append('search', params.search);
+    if (params?.annee) query.append('annee', params.annee);
+    if (params?.mois) query.append('mois', params.mois);
     
     return this.request(`/admin/consumptions?${query.toString()}`);
   }
@@ -238,10 +241,11 @@ class AdminApiService {
   }
 
   // Logs
-  async getLogs(params?: { page?: number; limit?: number }) {
+  async getLogs(params?: { page?: number; limit?: number; search?: string }) {
     const query = new URLSearchParams();
     if (params?.page) query.append('page', params.page.toString());
     if (params?.limit) query.append('limit', params.limit.toString());
+    if (params?.search) query.append('search', params.search);
     
     return this.request(`/admin/logs?${query.toString()}`);
   }

@@ -18,7 +18,7 @@ export default function LogsPage() {
   const loadLogs = async () => {
     try {
       setLoading(true);
-      const response = await adminApiService.getLogs();
+      const response = await adminApiService.getLogs({ search: search || undefined, limit: 100 });
       if (response.data) {
         const data = response.data as any;
         const logsData = data.logs || data.data || (Array.isArray(data) ? data : []);
@@ -96,7 +96,7 @@ export default function LogsPage() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {logs.map((log) => (
-                        <tr key={log._id} className="hover:bg-gray-50">
+                        <tr key={log.id || log._id} className="hover:bg-gray-50">
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                             {new Date(log.createdAt || log.timestamp).toLocaleString('fr-FR')}
                           </td>

@@ -10,7 +10,7 @@ import adminApiService from '@/services/adminApiService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
 
 interface User {
-  _id: string;
+  id: string;
   nom: string;
   prenom: string;
   email: string;
@@ -50,7 +50,13 @@ export default function UsersPage() {
       if (response.data) {
         const data = response.data as any;
         const usersData = data.users || data.data || (Array.isArray(data) ? data : []);
-        setUsers(Array.isArray(usersData) ? usersData : []);
+        const list = Array.isArray(usersData) ? usersData : [];
+        setUsers(
+          list.map((u: User & { _id?: string }) => ({
+            ...u,
+            id: u.id ?? u._id ?? '',
+          }))
+        );
         setTotal(data.pagination?.total || data.total || 0);
       }
     } catch (error) {
@@ -186,7 +192,7 @@ export default function UsersPage() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {users.map((user) => (
-                        <tr key={user._id} className="hover:bg-gray-50">
+                        <tr key={user.id} className="hover:bg-gray-50">
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap">
                             <div className="text-sm font-semibold text-gray-900">
                               {user.prenom} {user.nom}
@@ -202,14 +208,14 @@ export default function UsersPage() {
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex items-center justify-end gap-2">
                               <button 
-                                onClick={() => handleViewDetails(user._id)}
+                                onClick={() => handleViewDetails(user.id)}
                                 className="p-2 text-gray-600 hover:text-[#FFA800] hover:bg-gray-100 rounded-lg transition-colors"
                                 title="Voir les détails"
                               >
                                 <Eye size={18} />
                               </button>
                               <button
-                                onClick={() => confirmDelete(user._id)}
+                                onClick={() => confirmDelete(user.id)}
                                 className="p-2 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors text-red-500"
                                 title="Supprimer"
                               >

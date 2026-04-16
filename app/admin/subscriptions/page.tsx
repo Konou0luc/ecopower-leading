@@ -68,7 +68,7 @@ export default function SubscriptionsPage() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {subscriptions.map((sub) => (
-                        <tr key={sub._id} className="hover:bg-gray-50">
+                        <tr key={sub.id || sub._id} className="hover:bg-gray-50">
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
                             {sub.utilisateur?.prenom} {sub.utilisateur?.nom}
                           </td>

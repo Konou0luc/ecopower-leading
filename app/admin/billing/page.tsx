@@ -9,7 +9,8 @@ import { generateInvoicePdf } from '@/services/pdfService';
 import LoadingSpinner from '@/components/admin/ui/LoadingSpinner';
 
 interface Bill {
-  _id: string;
+  _id?: string;
+  id?: string;
   numeroFacture?: string;
   residentId?: {
     _id?: string;
@@ -85,7 +86,7 @@ export default function BillingPage() {
 
   const handleDownloadBill = async (bill: Bill) => {
     try {
-      setDownloading(bill._id);
+      setDownloading(bill._id || bill.id || '');
       
       // Afficher un indicateur de chargement
       const loadingMessage = document.createElement('div');
@@ -103,7 +104,10 @@ export default function BillingPage() {
       if (residentsResponse.data) {
         const data = residentsResponse.data as any;
         const residents = data.residents || data.data || [];
-        residentFullData = residents.find((r: any) => r._id === bill.residentId?._id);
+        const rid = bill.residentId && typeof bill.residentId === 'object'
+          ? (bill.residentId as { id?: string; _id?: string }).id ?? (bill.residentId as { _id?: string })._id
+          : undefined;
+        residentFullData = residents.find((r: any) => (r.id ?? r._id) === rid);
       }
 
       if (!residentFullData || !bill.residentId) {
@@ -129,12 +133,16 @@ export default function BillingPage() {
       // Trouver la consommation correspondante
       const data = consumptionResponse.data as any;
       const consumptions = data.consommations || data.data || [];
+      const consId = bill.consommationId && typeof bill.consommationId === 'object'
+        ? (bill.consommationId as { id?: string; _id?: string }).id ?? (bill.consommationId as { _id?: string })._id
+        : undefined;
+      const resIdNested = (x: any) => (x?.id ?? x?._id);
       const consumption = consumptions.find((c: any) => {
         if (bill.consommationId) {
-          return c._id === bill.consommationId._id ||
-            (c.mois === bill.consommationId.mois && 
-             c.annee === bill.consommationId.annee &&
-             (bill.residentId ? c.residentId?._id === bill.residentId._id : true));
+          return (c.id ?? c._id) === consId ||
+            (c.mois === (bill.consommationId as { mois?: number }).mois && 
+             c.annee === (bill.consommationId as { annee?: number }).annee &&
+             (bill.residentId ? resIdNested(c.residentId) === resIdNested(bill.residentId as object) : true));
         }
         return false;
       });
@@ -148,7 +156,10 @@ export default function BillingPage() {
 
       // Préparer les données pour le PDF
       const residentData = {
-        _id: bill.residentId?._id || residentFullData._id,
+        _id: (bill.residentId as { _id?: string; id?: string } | undefined)?._id
+          || (bill.residentId as { id?: string } | undefined)?.id
+          || residentFullData._id
+          || residentFullData.id,
         nom: bill.residentId?.nom || residentFullData.nom || '',
         prenom: bill.residentId?.prenom || residentFullData.prenom || '',
         email: bill.residentId?.email || residentFullData.email || '',
@@ -164,14 +175,17 @@ export default function BillingPage() {
       };
 
       const billData = {
-        _id: bill._id,
+        _id: bill._id || bill.id,
         numeroFacture: bill.numeroFacture,
         montant: bill.montant || bill.montantTotal || 0,
         dateEmission: bill.dateEmission || bill.dateFacture || new Date().toISOString(),
         datePaiement: undefined,
         statut: bill.statut || 'en attente',
         consommationId: {
-          _id: bill.consommationId?._id || consumption._id,
+          _id: (bill.consommationId as { _id?: string; id?: string } | undefined)?._id
+            || (bill.consommationId as { id?: string } | undefined)?.id
+            || consumption.id
+            || consumption._id,
           kwh: consumptionData.kwh,
           mois: consumptionData.mois,
           annee: consumptionData.annee,
@@ -270,9 +284,9 @@ export default function BillingPage() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {bills.map((bill) => (
-                        <tr key={bill._id} className="hover:bg-gray-50">
+                        <tr key={bill.id || bill._id} className="hover:bg-gray-50">
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">
-                            #{bill.numeroFacture || bill._id?.slice(-6)}
+                            #{bill.numeroFacture || (bill.id || bill._id || '').slice(-6)}
                           </td>
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                             {bill.dateFacture 
@@ -308,11 +322,11 @@ export default function BillingPage() {
                           <td className="px-3 md:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                             <button 
                               onClick={() => handleDownloadBill(bill)}
-                              disabled={downloading === bill._id}
+                              disabled={downloading === (bill._id || bill.id)}
                               className="p-2 text-gray-600 hover:text-[#FFA800] hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               title="Télécharger la facture"
                             >
-                              {downloading === bill._id ? (
+                              {downloading === (bill._id || bill.id) ? (
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#FFA800]"></div>
                               ) : (
                                 <Download size={18} />

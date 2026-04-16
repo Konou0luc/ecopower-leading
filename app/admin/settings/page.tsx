@@ -110,7 +110,7 @@ export default function SettingsPage() {
       setSettings({
         general: {
           appName: 'Ecopower',
-          baseUrl: 'https://ecopower-api.vercel.app',
+          baseUrl:  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
           apiVersion: '1.0.0'
         },
         security: {
