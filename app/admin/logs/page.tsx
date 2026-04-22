@@ -65,7 +65,7 @@ export default function LogsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Rechercher dans les logs..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-field"
             />
           </div>
         </AdminCardContent>

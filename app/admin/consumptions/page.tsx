@@ -105,7 +105,7 @@ export default function ConsumptionsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher une consommation..."
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                className="admin-field"
               />
             </div>
             
@@ -115,7 +115,7 @@ export default function ConsumptionsPage() {
                 <select
                   value={yearFilter}
                   onChange={(e) => setYearFilter(e.target.value)}
-                  className="w-full pl-10 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent appearance-none"
+                  className="admin-field-select"
                 >
                   <option value="">Année</option>
                   {years.map(year => (
@@ -128,7 +128,7 @@ export default function ConsumptionsPage() {
                 <select
                   value={monthFilter}
                   onChange={(e) => setMonthFilter(e.target.value)}
-                  className="w-full pl-4 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent appearance-none"
+                  className="admin-select-plain"
                 >
                   <option value="">Mois</option>
                   {months.map(month => (

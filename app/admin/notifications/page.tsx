@@ -155,7 +155,7 @@ export default function NotificationsPage() {
                   onChange={(e) => setBroadcastForm({ ...broadcastForm, title: e.target.value })}
                   placeholder="Entrez le titre de la notification"
                   required
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  className="admin-input-plain"
                 />
               </div>
 
@@ -171,7 +171,7 @@ export default function NotificationsPage() {
                   placeholder="Entrez votre message de notification..."
                   rows={6}
                   required
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent resize-none"
+                  className="admin-textarea-plain min-h-[120px]"
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   {broadcastForm.message.length} caractère(s)
@@ -187,7 +187,7 @@ export default function NotificationsPage() {
                   id="broadcast-role"
                   value={broadcastForm.role}
                   onChange={(e) => setBroadcastForm({ ...broadcastForm, role: e.target.value as '' | 'proprietaire' | 'resident' | 'admin' })}
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  className="admin-input-plain"
                 >
                   <option value="">Tous les utilisateurs</option>
                   <option value="proprietaire">Propriétaires uniquement</option>

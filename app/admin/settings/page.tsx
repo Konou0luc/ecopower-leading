@@ -238,7 +238,7 @@ export default function SettingsPage() {
               value={appInfo.email}
               onChange={(e) => setAppInfo({ ...appInfo, email: e.target.value })}
               placeholder="exemple@ecopower.com"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -250,7 +250,7 @@ export default function SettingsPage() {
               value={appInfo.phone}
               onChange={(e) => setAppInfo({ ...appInfo, phone: e.target.value })}
               placeholder="+228 97 24 04 60"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -262,7 +262,7 @@ export default function SettingsPage() {
               value={appInfo.website}
               onChange={(e) => setAppInfo({ ...appInfo, website: e.target.value })}
               placeholder="https://ecopower-web.vercel.app"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -274,7 +274,7 @@ export default function SettingsPage() {
               onChange={(e) => setAppInfo({ ...appInfo, description: e.target.value })}
               placeholder="Ecopower vous aide à gérer votre électricité en toute simplicité"
               rows={3}
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -286,7 +286,7 @@ export default function SettingsPage() {
               value={appInfo.guideRapideUrl}
               onChange={(e) => setAppInfo({ ...appInfo, guideRapideUrl: e.target.value })}
               placeholder="https://ecopowers.online/guide-rapide"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -298,7 +298,7 @@ export default function SettingsPage() {
               value={appInfo.privacyPolicyUrl}
               onChange={(e) => setAppInfo({ ...appInfo, privacyPolicyUrl: e.target.value })}
               placeholder="https://ecopowers.online/privacy-policy"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           </>
@@ -325,7 +325,7 @@ export default function SettingsPage() {
                   general: { ...settings.general, apiVersion: e.target.value },
                 })
               }
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -341,7 +341,7 @@ export default function SettingsPage() {
                   general: { ...settings.general, appName: e.target.value },
                 })
               }
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -357,7 +357,7 @@ export default function SettingsPage() {
                   general: { ...settings.general, baseUrl: e.target.value },
                 })
               }
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
         </AdminCardContent>
@@ -382,7 +382,7 @@ export default function SettingsPage() {
                   security: { ...settings.security, tokenExpiry: parseInt(e.target.value) },
                 })
               }
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
           <div>
@@ -398,7 +398,7 @@ export default function SettingsPage() {
                   security: { ...settings.security, passwordMinLength: parseInt(e.target.value) },
                 })
               }
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+              className="admin-input-plain"
             />
           </div>
         </AdminCardContent>

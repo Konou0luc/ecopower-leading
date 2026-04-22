@@ -67,6 +67,7 @@ export default function Header() {
     { name: 'Screenshots', href: '#screenshots', id: 'screenshots' },
     { name: 'Partenaires', href: '#partners', id: 'partners' },
     { name: 'Télécharger', href: '#download', id: 'download' },
+    { name: 'Rejoindre', href: '/rejoindre', id: 'rejoindre' },
   ];
 
   return (

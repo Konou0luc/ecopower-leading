@@ -150,7 +150,7 @@ export default function ProfilePage() {
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  className="admin-field"
                   placeholder="••••••••"
                 />
               </div>
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  className="admin-field"
                   placeholder="••••••••"
                 />
               </div>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA800] focus:border-transparent"
+                  className="admin-field"
                   placeholder="••••••••"
                 />
               </div>

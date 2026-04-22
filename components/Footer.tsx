@@ -19,6 +19,7 @@ const footerLinks = {
   legal: [
     { name: 'Confidentialité', href: '/privacy-policy' },
     { name: 'Conditions', href: '/terms-of-service' },
+    { name: 'Suppression des données', href: '/suppression-donnees' },
     { name: 'Mentions légales', href: '/mentions-legales' },
   ],
 };
