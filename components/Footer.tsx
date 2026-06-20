@@ -1,160 +1,123 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+'use client'
 
-const currentYear = new Date().getFullYear();
-
-const footerLinks = {
-  product: [
-    { name: 'Fonctionnalités', href: '#features' },
-    { name: 'Screenshots', href: '#screenshots' },
-    { name: 'Télécharger', href: '#download' },
-  ],
-  support: [
-    { name: 'À propos', href: '#about' },
-    { name: 'Partenaires', href: '#partners' },
-    { name: 'Guide rapide', href: '/guide-rapide' },
-    { name: 'Contact', href: '/contact' },
-  ],
-  legal: [
-    { name: 'Confidentialité', href: '/privacy-policy' },
-    { name: 'Conditions', href: '/terms-of-service' },
-    { name: 'Suppression des données', href: '/suppression-donnees' },
-    { name: 'Mentions légales', href: '/mentions-legales' },
-  ],
-};
-
-const socialLinks = [
-  { icon: Facebook, href: '#', label: 'Facebook' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  { icon: Instagram, href: '#', label: 'Instagram' },
-];
+import Link from 'next/link'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-white overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,168,0,0.1),transparent_50%)]"></div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Company Info */}
+    <motion.footer 
+        className="bg-[#111111] py-24"
+        initial={{ opacity: 0, y: 40, filter: 'blur(30px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+      <div className="container mx-auto px-6 lg:px-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <Image
-                src="/logo.png"
-                alt="Ecopower"
-                width={44}
-                height={44}
-                className="object-contain"
-              />
-              <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <Link href="/" className="flex items-center gap-2 mb-8">
+              <div className="w-8 h-8 flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="Ecopower"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
+              </div>
+              <span className="text-xl font-semibold text-white tracking-tight">
                 Ecopower
               </span>
-            </div>
-            <p className="text-gray-400 mb-6 leading-relaxed text-sm">
-              Solution de gestion de consommation électrique adaptée au contexte africain. 
-              Simplifiez votre gestion énergétique avec Ecopower.
+            </Link>
+            <p className="text-white/60 leading-relaxed mb-8">
+              Simplifiez la gestion électrique de vos logements locatifs.
             </p>
-            
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-gray-400 hover:text-[#FFA800] transition-colors group">
-                <Phone size={18} className="text-[#FFA800] transition-colors" />
-                <span className="text-sm">+228 97240460</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-400 hover:text-[#FFA800] transition-colors group">
-                <Mail size={18} className="text-[#FFA800] transition-colors" />
-                <span className="text-sm">ecopowerafrique@gmail.com</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-400 hover:text-[#FFA800] transition-colors group">
-                <MapPin size={18} className="text-[#FFA800] transition-colors" />
-                <span className="text-sm">Lomé, Togo</span>
-              </div>
-            </div>
           </div>
 
-          {/* Product Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white">Produit</h3>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-[#FFA800] transition-colors text-sm flex items-center gap-2 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-[#FFA800] transition-all duration-300"></span>
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-sm font-semibold text-white mb-6 uppercase tracking-[0.15em]">
+              Produit
+            </h4>
+            <ul className="space-y-4">
+              <li>
+                <Link href="#features" className="text-white/60 hover:text-white transition-colors">
+                  Fonctionnalités
+                </Link>
+              </li>
+              <li>
+                <Link href="#how-it-works" className="text-white/60 hover:text-white transition-colors">
+                  Comment ça marche
+                </Link>
+              </li>
+              <li>
+                <Link href="#pricing" className="text-white/60 hover:text-white transition-colors">
+                  Tarifs
+                </Link>
+              </li>
+              <li>
+                <Link href="#faq" className="text-white/60 hover:text-white transition-colors">
+                  FAQ
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Support Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white">Support</h3>
-            <ul className="space-y-3">
-              {footerLinks.support.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-[#FFA800] transition-colors text-sm flex items-center gap-2 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-[#FFA800] transition-all duration-300"></span>
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-sm font-semibold text-white mb-6 uppercase tracking-[0.15em]">
+              Entreprise
+            </h4>
+            <ul className="space-y-4">
+              <li>
+                <Link href="/contact" className="text-white/60 hover:text-white transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="text-white/60 hover:text-white transition-colors">
+                  Politique de confidentialité
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service" className="text-white/60 hover:text-white transition-colors">
+                  Conditions d'utilisation
+                </Link>
+              </li>
+              <li>
+                <Link href="/mentions-legales" className="text-white/60 hover:text-white transition-colors">
+                  Mentions légales
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Legal Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white">Légal</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-[#FFA800] transition-colors text-sm flex items-center gap-2 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-[#FFA800] transition-all duration-300"></span>
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-sm font-semibold text-white mb-6 uppercase tracking-[0.15em]">
+              Se connecter
+            </h4>
+            <ul className="space-y-4">
+              <li>
+                <Link href="/rejoindre" className="text-white/60 hover:text-white transition-colors">
+                  Commencer maintenant
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Footer */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            {/* Copyright */}
-            <div className="text-gray-400 text-sm">
-              © {currentYear} Ecopower. Tous droits réservés.
-            </div>
-
-            {/* Social Links */}
-            <div className="flex gap-4">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-[#FFA800] rounded-full text-gray-400 hover:text-white transition-all"
-                  aria-label={social.label}
-                >
-                  <social.icon size={18} />
-                </a>
-              ))}
-            </div>
+        <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-white/40 text-sm">
+            © {currentYear} Ecopower. Tous droits réservés.
+          </p>
+          <div className="flex items-center gap-6">
+            <span className="text-white/40 text-sm">
+              Fait avec ♥
+            </span>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </motion.footer>
+  )
 }

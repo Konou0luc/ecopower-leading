@@ -1,201 +1,157 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { Home, Building2, Layers, Check, Star } from 'lucide-react';
-
-const plans = [
-  {
-    name: 'Basic',
-    monthlyPrice: 1000,
-    description: 'Idéal pour les petites propriétés',
-    popular: false,
-    icon: Home,
-    features: [
-      'Gestion de 2 maisons',
-      'Jusqu\'à 5 résidents par maison',
-      'Factures automatiques',
-      'Relevés de compteur',
-      'Historique des consommations',
-      'Calcul automatique',
-      'Messagerie avec résidents',
-      'Tableau de bord',
-    ],
-  },
-  {
-    name: 'Premium',
-    monthlyPrice: 2000,
-    description: 'Parfait pour les propriétés moyennes',
-    popular: true,
-    icon: Building2,
-    features: [
-      'Tout du plan Basic',
-      'Gestion de 3 maisons',
-      'Jusqu\'à 7 résidents par maison',
-      'Statistiques avancées',
-      'Rappels de paiement',
-      'Suivi des factures en retard',
-      'Messagerie de groupe',
-      'Notifications push',
-      'Support prioritaire',
-      'Formation incluse',
-    ],
-  },
-  {
-    name: 'Enterprise',
-    monthlyPrice: 5000,
-    description: 'Pour les grandes propriétés',
-    popular: false,
-    icon: Layers,
-    features: [
-      'Tout du plan Premium',
-      'Gestion de 4 maisons',
-      'Jusqu\'à 10 résidents par maison',
-      'Support prioritaire email',
-      'Assistance personnalisée',
-      'Demandes de fonctionnalités prioritaires',
-    ],
-  },
-];
-
-const periods = [
-  { label: '1 Mois', months: 1, discount: 0 },
-  { label: '3 Mois', months: 3, discount: 0.1 }, // 10% de réduction
-  { label: '12 Mois', months: 12, discount: 0.2 }, // 20% de réduction
-];
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Check } from 'lucide-react'
 
 export default function PricingSection() {
-  const [selectedPeriod, setSelectedPeriod] = useState(periods[2]); // 12 mois par défaut
+  const [period, setPeriod] = useState<'monthly' | 'yearly'>('monthly')
 
-  const calculatePrice = (monthlyPrice: number) => {
-    const totalPrice = monthlyPrice * selectedPeriod.months;
-    const discountedPrice = totalPrice * (1 - selectedPeriod.discount);
-    return Math.round(discountedPrice);
-  };
+  const plans = [
+    {
+      name: 'Basic',
+      price: period === 'monthly' ? 1000 : 850,
+      description: 'Pour les petits portfolios',
+      features: [
+        '2 logements',
+        '5 locataires maximum',
+        'Factures automatiques',
+        'Suivi des consommations',
+        'Historique complet'
+      ],
+      popular: false
+    },
+    {
+      name: 'Premium',
+      price: period === 'monthly' ? 2000 : 1700,
+      description: 'Pour les propriétaires actifs',
+      features: [
+        '3 logements',
+        '7 locataires maximum',
+        'Statistiques avancées',
+        'Rappels de paiement',
+        'Notifications push',
+        'Support prioritaire',
+        'Formation incluse'
+      ],
+      popular: true
+    },
+    {
+      name: 'Enterprise',
+      price: period === 'monthly' ? 5000 : 4250,
+      description: 'Pour les grands projets',
+      features: [
+        '4 logements',
+        '10 locataires maximum',
+        'Support dédié',
+        'Formation personnalisée',
+        'Demandes de fonctionnalités'
+      ],
+      popular: false
+    }
+  ]
 
   return (
-    <section id="pricing" className="py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4">
-            <span className="text-sm font-semibold text-[#FFA800] uppercase tracking-wider">Tarifs</span>
-          </div>
-          <h2 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Choisis ton
-            <span className="block bg-gradient-to-r from-[#FFA800] to-[#FFD700] bg-clip-text text-transparent">plan d&apos;abonnement</span>
-          </h2>
-          <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-light">
-            Des tarifs simples et transparents
+    <motion.section 
+      id="pricing" 
+      className="py-32 md:py-48 bg-[#F7F6F3]"
+      initial={{ opacity: 0, y: 40, filter: 'blur(30px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="container mx-auto px-6 lg:px-16">
+        <div className="max-w-5xl mx-auto text-center mb-24">
+          <p className="text-xs uppercase tracking-[0.3em] font-semibold text-[#787774] mb-6">
+            Tarifs
           </p>
-        </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-[#2F3437] leading-tight mb-8">
+            Des plans adaptés à vos besoins
+          </h2>
+          <p className="text-lg text-[#787774] max-w-3xl mx-auto leading-relaxed mb-12">
+            Payez mensuellement ou économisez 15% avec la facturation annuelle.
+          </p>
 
-        {/* Period Selector Tabs */}
-        <div className="flex justify-center mb-16">
-          <div className="inline-flex bg-gray-100 rounded-xl p-1.5 gap-1">
-            {periods.map((period) => (
-              <button
-                key={period.months}
-                onClick={() => setSelectedPeriod(period)}
-                className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
-                  selectedPeriod.months === period.months
-                    ? 'bg-[#FFA800] text-white shadow-lg'
-                    : 'text-gray-700 hover:text-[#FFA800] hover:bg-gray-50'
-                }`}
-              >
-                {period.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-6 max-w-6xl mx-auto relative">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`relative rounded-3xl transition-all duration-300 ${
-                plan.popular
-                  ? 'bg-white border-2 border-[#FFA800] shadow-2xl scale-105 md:scale-110'
-                  : 'bg-white border border-gray-200 shadow-lg hover:shadow-xl overflow-hidden'
+          {/* Period Toggle */}
+          <div className="inline-flex bg-[#EAEAEA] p-1 rounded-full">
+            <button
+              onClick={() => setPeriod('monthly')}
+              className={`px-8 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                period === 'monthly' ? 'bg-white text-[#2F3437] shadow-[0_2px_8px_rgba(0,0,0,0.04)]' : 'text-[#787774]'
               }`}
             >
-              {/* Badge POPULAIRE */}
-              {plan.popular && (
-                <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-[100]">
-                  <div className="bg-gradient-to-r from-[#FFA800] to-[#FFD700] text-white px-10 py-3.5 rounded-full text-lg font-extrabold shadow-2xl flex items-center gap-2.5 border-4 border-white whitespace-nowrap">
-                    <Star size={22} className="fill-white" />
-                    <span>POPULAIRE</span>
-                  </div>
-                </div>
-              )}
+              Mensuel
+            </button>
+            <button
+              onClick={() => setPeriod('yearly')}
+              className={`px-8 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                period === 'yearly' ? 'bg-white text-[#2F3437] shadow-[0_2px_8px_rgba(0,0,0,0.04)]' : 'text-[#787774]'
+              }`}
+            >
+              Annuel
+            </button>
+          </div>
+        </div>
 
-              <div className={`p-8 rounded-3xl overflow-hidden ${plan.popular ? 'pt-16' : ''}`}>
-                {/* Plan Header */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-black to-gray-900 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <plan.icon size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-                    <p className="text-sm text-gray-600">{plan.description}</p>
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+              className={`group p-8 rounded-2xl border transition-all duration-500 flex flex-col ${
+                plan.popular
+                  ? 'bg-[#111111] border-[#111111] text-white shadow-[0_2px_24px_rgba(17,17,17,0.15)] scale-[1.02]'
+                  : 'bg-white border-[#EAEAEA] hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]'
+              }`}>
+              <div className="mb-8">
+                <h3 className={`text-2xl font-semibold mb-2 ${plan.popular ? 'text-white' : 'text-[#2F3437]'}`}>
+                  {plan.name}
+                </h3>
+                <p className={`text-sm ${plan.popular ? 'text-white/60' : 'text-[#787774]'}`}>
+                  {plan.description}
+                </p>
+              </div>
 
-                {/* Price */}
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl lg:text-5xl font-extrabold text-gray-900">
-                      {calculatePrice(plan.monthlyPrice).toLocaleString()}
-                    </span>
-                    <span className="text-lg text-gray-600">FCFA</span>
-                  </div>
-                  <span className="text-gray-600">
-                    {selectedPeriod.months === 1 
-                      ? 'par mois' 
-                      : `pour ${selectedPeriod.months} mois`}
-                    {selectedPeriod.discount > 0 && (
-                      <span className="ml-2 text-[#FFA800] font-semibold">
-                        (Économisez {Math.round(selectedPeriod.discount * 100)}%)
-                      </span>
-                    )}
+              <div className="mb-10">
+                <div className="flex items-baseline gap-2">
+                  <span className={`text-5xl font-bold ${plan.popular ? 'text-white' : 'text-[#2F3437]'}`}>
+                    {plan.price.toLocaleString()}
+                  </span>
+                  <span className={`text-lg ${plan.popular ? 'text-white/60' : 'text-[#787774]'}`}>
+                    FCFA/mois
                   </span>
                 </div>
-
-                {/* Features List */}
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check size={14} className="text-white" />
-                      </div>
-                      <span className="text-gray-700 text-sm leading-relaxed">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA Button */}
-                <button
-                  className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
-                    plan.popular
-                      ? 'bg-[#FFA800] text-white hover:bg-[#E69500] shadow-lg hover:shadow-xl'
-                      : 'bg-white text-[#FFA800] border-2 border-[#FFA800] hover:bg-[#FFA800] hover:text-white'
-                  }`}
-                >
-                  {plan.popular ? 'Commencer' : 'Choisir ce plan'}
-                </button>
               </div>
-            </div>
+
+              <div className="flex-1 space-y-4 mb-10">
+                {plan.features.map((feature, fIndex) => (
+                  <div key={fIndex} className="flex items-center gap-3">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      plan.popular ? 'bg-white/10 text-white' : 'bg-[#E1F3FE] text-[#1F6C9F]'
+                    }`}>
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span className={`text-sm ${plan.popular ? 'text-white/80' : 'text-[#787774]'}`}>
+                      {feature}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <button className={`w-full py-4 rounded-lg font-medium transition-all duration-200 ${
+                plan.popular
+                  ? 'bg-white text-[#111111] hover:bg-white/90 active:scale-[0.98]'
+                  : 'bg-[#111111] text-white hover:bg-[#000000] active:scale-[0.98]'
+              }`}>
+                Choisir ce plan
+              </button>
+            </motion.div>
           ))}
         </div>
-
-        {/* Additional Info */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 text-sm">
-            Tous les plans incluent une période d&apos;essai gratuite
-          </p>
-        </div>
       </div>
-    </section>
-  );
+    </motion.section>
+  )
 }
-

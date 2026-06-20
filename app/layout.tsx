@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-montserrat",
+});
 
 export const metadata: Metadata = {
-  title: "Ecopower - Gestion de Consommation Électrique | Solution Intelligente au Togo",
-  description: "Application simple et efficace pour gérer votre consommation électrique au Togo. Suivez vos relevés, générez vos factures automatiquement et gardez le contrôle sur vos dépenses.",
-  keywords: "ecopower, gestion électrique, factures, consommation, énergie, Togo, Lomé, gestion résidentielle, suivi consommation, facturation automatique",
+  title: "Ecopower - Solution de Gestion Énergétique Professionnelle",
+  description: "Optimisez votre consommation électrique avec Ecopower. Monitoring en temps réel, facturation automatisée et gestion intelligente pour les résidences et entreprises.",
+  keywords: "ecopower, gestion énergétique, monitoring électrique, facturation intelligente, optimisation énergie, Togo, Lomé, smart energy",
   icons: {
     icon: [
       { url: '/logo.png', type: 'image/png' },
@@ -24,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body className={inter.className}>{children}</body>
+    <html lang="fr" className="scroll-smooth">
+      <body className={`${montserrat.className} ${montserrat.variable} antialiased`}>{children}</body>
     </html>
   );
 }

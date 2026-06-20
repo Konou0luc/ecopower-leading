@@ -15,7 +15,19 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-montserrat)", "Montserrat", "system-ui", "sans-serif"],
+      },
+      transitionTimingFunction: {
+        'fluid': 'cubic-bezier(0.32, 0.72, 0, 1)',
+      },
+      animation: {
+        'fade-up': 'fade-up 0.8s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+      },
+      keyframes: {
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)', filter: 'blur(5px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+        },
       },
     },
   },

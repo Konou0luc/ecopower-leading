@@ -1,147 +1,119 @@
-'use client';
+'use client'
 
-import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const heroSteps = [
+const heroImages = [
   {
-    image: '/assets/problems/conflit-famille.png',
-    label: 'Factures qui créent des disputes à la maison',
+    src: '/assets/problems/maison-eclairee.jpg',
+    alt: 'Maison moderne éclairée'
   },
   {
-    image: '/assets/problems/compteur-electrique.jpg',
-    label: 'Compteur difficile à comprendre',
+    src: '/assets/problems/conflit-famille.png',
+    alt: 'Gestion de conflits familiaux'
   },
   {
-    image: '/assets/problems/smartphone-app.jpg',
-    label: 'Tu vois ta consommation sur ton téléphone',
-  },
-  {
-    image: '/assets/problems/maison-eclairee.jpg',
-    label: 'Maison bien éclairée, facture maîtrisée',
-  },
-];
+    src: '/assets/problems/hero-personne-telephone.png',
+    alt: 'Utilisation mobile'
+  }
+]
 
 export default function HeroSection() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [typedText, setTypedText] = useState('');
-  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentStep((prev) => (prev + 1) % heroSteps.length);
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Effet d'écriture automatique pour le texte principal
-  useEffect(() => {
-    // Nettoyer l'intervalle précédent s'il existe
-    if (typingIntervalRef.current) {
-      clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-    }
-
-    const fullText = heroSteps[currentStep].label;
-    let index = 0;
-    let isFirstChar = true;
-
-    typingIntervalRef.current = setInterval(() => {
-      if (isFirstChar) {
-        setTypedText('');
-        isFirstChar = false;
-      }
-      
-      index += 1;
-      setTypedText(fullText.slice(0, index));
-
-      if (index >= fullText.length) {
-        if (typingIntervalRef.current) {
-          clearInterval(typingIntervalRef.current);
-          typingIntervalRef.current = null;
-        }
-      }
-    }, 45);
-
-    return () => {
-      if (typingIntervalRef.current) {
-        clearInterval(typingIntervalRef.current);
-        typingIntervalRef.current = null;
-      }
-    };
-  }, [currentStep]);
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % heroImages.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
-    <section className="relative min-h-[80vh] lg:min-h-[90vh] pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
-      {/* Images de fond qui se défilent avec les problèmes/solutions */}
-      <div className="absolute inset-0 -z-10">
-        {heroSteps.map((step, index) => (
-          <div
-            key={step.image}
-            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              index === currentStep ? 'opacity-100' : 'opacity-0'
-            }`}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#111111]">
+      {/* Background Image Carousel */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 0.4, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full h-full"
           >
             <Image
-              src={step.image}
-              alt={step.label}
+              src={heroImages[currentIndex].src}
+              alt={heroImages[currentIndex].alt}
               fill
-              priority={index === 0}
+              priority
               className="object-cover"
             />
-          </div>
-        ))}
-        {/* Voile blanc pour garder le texte lisible tout en laissant bien voir l'image */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent" />
+          </motion.div>
+        </AnimatePresence>
+        {/* Editorial Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#F7F6F3] z-10" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-4xl lg:max-w-5xl">
-          
-          {/* Left: Content */}
-          <div className="space-y-8 pt-6 lg:pt-0">
-            <p className="text-base sm:text-lg font-medium text-[#FFA800] uppercase tracking-[0.2em]">
-              Ecopower
+      <div className="container mx-auto px-6 lg:px-16 relative z-20 pt-32 pb-40">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="text-xs uppercase tracking-[0.4em] font-bold text-white/70 mb-8">
+              Gestion électrique automatisée
             </p>
-
-            {/* Texte principal avec effet d'écriture */}
-            <h1 className="min-h-[3.6rem] sm:min-h-[4.2rem] lg:min-h-[5rem] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
-              {typedText || '\u00A0'}
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-normal leading-[1.1] text-white tracking-tight mb-12">
+              Automatisez la gestion électrique de vos locataires
             </h1>
-
-            <p className="text-lg lg:text-xl text-gray-800 leading-relaxed max-w-xl">
-              L&apos;électricité crée souvent des problèmes à la maison.
-              <span className="block mt-1">
-                Avec Ecopower, tu vois clairement ce que tu consommes et tu évites les disputes.
-              </span>
+            
+            <p className="text-lg md:text-2xl text-white/80 max-w-3xl mx-auto mb-16 leading-relaxed font-light">
+              Suivez les consommations, générez les factures automatiquement et éliminez les erreurs de calcul depuis une seule plateforme.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link
+                href="/rejoindre"
+                className="px-12 py-5 bg-[#FFA800] text-black rounded-lg font-bold text-lg hover:bg-[#ffb320] active:scale-[0.98] transition-all duration-300 shadow-2xl shadow-[#FFA800]/20"
+              >
+                Démarrer maintenant
+              </Link>
+              
               <a
-                href="https://play.google.com/store/apps/details?id=tg.konou.ecopower"
+                href="https://play.google.com/store"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block transition-transform hover:scale-105"
+                className="flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-[0.98]"
               >
                 <Image
                   src="/assets/logos/google-play-badge.svg"
                   alt="Disponible sur Google Play"
                   width={200}
                   height={60}
-                  className="h-12 w-auto"
+                  className="h-14 w-auto"
                 />
               </a>
             </div>
-
-            <div className="pt-4 flex flex-wrap gap-6 text-sm text-gray-500">
-              <span>✓ Gratuit</span>
-              <span>✓ Sans publicité</span>
-              <span>✓ Simple à utiliser</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
+
+      {/* Minimalist Indicators */}
+      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+        {heroImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentIndex(i)}
+            className={`h-1 transition-all duration-500 rounded-full ${
+              currentIndex === i ? 'w-12 bg-[#FFA800]' : 'w-4 bg-white/30'
+            }`}
+          />
+        ))}
+      </div>
     </section>
-  );
+  )
 }

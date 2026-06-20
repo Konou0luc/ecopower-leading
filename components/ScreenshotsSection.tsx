@@ -1,169 +1,138 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Smartphone, BarChart3, FileText, Users, X } from 'lucide-react';
+import { useState } from 'react'
+import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X } from 'lucide-react'
 
-// 4 screenshots sélectionnés pour un design professionnel
 const screenshots = [
   {
     src: '/assets/screens/acceder-tableau-bord.png',
     title: 'Tableau de bord',
-    description: 'Vue d\'ensemble de votre consommation énergétique',
-    icon: BarChart3,
-    color: 'from-black to-gray-900',
+    description: 'Vue d’ensemble de vos logements'
   },
   {
     src: '/assets/screens/acceder-historique-conso.png',
-    title: 'Historique',
-    description: 'Suivez l\'évolution de vos consommations',
-    icon: Smartphone,
-    color: 'from-black to-gray-900',
+    title: 'Historique consommation',
+    description: 'Suivi des consommations par locataire'
   },
   {
     src: '/assets/screens/generer-pdf.png',
     title: 'Facturation',
-    description: 'Génération automatique de factures PDF',
-    icon: FileText,
-    color: 'from-black to-gray-900',
+    description: 'Factures PDF professionnelles'
   },
   {
     src: '/assets/screens/ajouter-residents.png',
-    title: 'Gestion résidents',
-    description: 'Administration simplifiée des utilisateurs',
-    icon: Users,
-    color: 'from-black to-gray-900',
-  },
-];
+    title: 'Gestion locataires',
+    description: 'Gestion simplifiée des résidents'
+  }
+]
 
 export default function ScreenshotsSection() {
-  const [selectedScreenshot, setSelectedScreenshot] = useState<number | null>(null);
-  
-  // Gestion du scroll de la page quand le modal est ouvert
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-
-    document.body.style.overflow = selectedScreenshot !== null ? 'hidden' : 'unset';
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [selectedScreenshot]);
-
-  const openModal = (index: number) => {
-    setSelectedScreenshot(index);
-  };
-
-  const closeModal = () => {
-    setSelectedScreenshot(null);
-  };
+  const [selectedImage, setSelectedImage] = useState<null | typeof screenshots[0]>(null)
 
   return (
     <>
-      <section id="screenshots" className="py-24 lg:py-32 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,168,0,0.02),transparent_70%)]"></div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <div className="inline-block mb-4">
-              <span className="text-sm font-semibold text-[#FFA800] uppercase tracking-wider">Application</span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-              Interface
-              <span className="block bg-gradient-to-r from-[#FFA800] to-[#FFD700] bg-clip-text text-transparent">moderne et intuitive</span>
+      <motion.section 
+        className="py-32 md:py-48 bg-[#111111]"
+        initial={{ opacity: 0, y: 40, filter: 'blur(30px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="max-w-5xl mx-auto text-center mb-24">
+            <p className="text-xs uppercase tracking-[0.3em] font-semibold text-[#9D9D9D] mb-6">
+              Application
+            </p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-tight mb-8">
+              Votre outil au bout des doigts
             </h2>
-            <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-light">
-              Découvrez les fonctionnalités clés d&apos;Ecopower à travers une sélection d&apos;écrans
+            <p className="text-lg text-[#9D9D9D] max-w-3xl mx-auto leading-relaxed">
+              Une interface claire et intuitive, accessible depuis votre mobile ou votre ordinateur.
             </p>
           </div>
 
-          {/* Screenshots Grid - 4 screenshots professionnels */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {screenshots.map((screenshot, index) => (
-              <div
+          {/* Grid of screenshots */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {screenshots.map((item, index) => (
+              <motion.div
                 key={index}
-                className="group relative"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+                className="group cursor-pointer"
+                onClick={() => setSelectedImage(item)}
               >
-                {/* Card avec effet glassmorphism */}
-                <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-200/50 hover:border-[#FFA800]/30 transition-all duration-500 hover:shadow-2xl hover:shadow-[#FFA800]/10">
-                  {/* Icon avec gradient */}
-                  <div className={`w-12 h-12 bg-gradient-to-br ${screenshot.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg`}>
-                    <screenshot.icon size={24} className="text-white" />
-                  </div>
-                  
-                  {/* Screenshot - Cliquable */}
-                  <button
-                    onClick={() => openModal(index)}
-                    className="relative aspect-[9/16] w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 mb-4 border border-gray-200/50 cursor-pointer hover:border-[#FFA800]/50 transition-all duration-300"
-                  >
-                    <Image
-                      src={screenshot.src}
-                      alt={screenshot.title}
-                      fill
-                      className="object-cover transition-all duration-500"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                    {/* Overlay au hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                        <p className="text-white text-xs leading-relaxed">{screenshot.description}</p>
-                      </div>
+                <div className="relative rounded-xl overflow-hidden border border-white/10 mb-4 aspect-[4/3]">
+                  <Image
+                    src={item.src}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                      <X size={20} className="text-white rotate-45" />
                     </div>
-                  </button>
-                  
-                  {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 text-center">
-                    {screenshot.title}
-                  </h3>
+                  </div>
                 </div>
-              </div>
+                <h3 className="text-lg font-semibold text-white mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-[#9D9D9D]">
+                  {item.description}
+                </p>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Modal pour afficher le screenshot en grand */}
-      {selectedScreenshot !== null && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-300"
-          onClick={closeModal}
-        >
-          <button
-            onClick={closeModal}
-            className="absolute top-4 right-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm border border-white/20"
-            aria-label="Fermer"
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+            onClick={() => setSelectedImage(null)}
           >
-            <X size={24} />
-          </button>
-          
-          <div
-            className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full aspect-[9/16] max-h-[90vh] rounded-2xl overflow-hidden bg-gray-900 border border-white/10 shadow-2xl">
-              <Image
-                src={screenshots[selectedScreenshot].src}
-                alt={screenshots[selectedScreenshot].title}
-                fill
-                className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            
-            {/* Info du screenshot */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {screenshots[selectedScreenshot].title}
-              </h3>
-              <p className="text-gray-300">
-                {screenshots[selectedScreenshot].description}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-6xl w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-16 right-0 text-white hover:text-[#9D9D9D] transition-colors duration-300"
+              >
+                <X size={32} />
+              </button>
+              <div className="relative aspect-video rounded-2xl overflow-hidden">
+                <Image
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  fill
+                  className="object-contain bg-black/30"
+                />
+              </div>
+              <div className="text-center mt-6">
+                <h3 className="text-2xl font-semibold text-white mb-2">
+                  {selectedImage.title}
+                </h3>
+                <p className="text-[#9D9D9D]">
+                  {selectedImage.description}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
-  );
+  )
 }
