@@ -84,7 +84,7 @@ export default function HeroSection() {
               </Link>
               
               <a
-                href="https://play.google.com/store"
+                href="https://play.google.com/store/apps/details?id=tg.konou.ecopower&hl=fr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-[0.98]"

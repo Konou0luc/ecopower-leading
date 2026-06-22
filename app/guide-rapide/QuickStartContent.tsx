@@ -253,7 +253,7 @@ export default function QuickStartContent() {
               </p>
             </div>
             <a
-              href="https://play.google.com/store/apps/details?id=tg.konou.ecopower"
+              href="https://play.google.com/store/apps/details?id=tg.konou.ecopower&hl=fr"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#111111] text-white rounded-md font-medium hover:bg-[#000000] active:scale-[0.98] transition-all duration-200"
